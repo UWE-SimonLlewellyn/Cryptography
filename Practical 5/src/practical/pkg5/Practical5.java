@@ -22,14 +22,14 @@ public class Practical5 {
      */
     public static void main(String[] args) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         // TODO code application logic here
-        String s = "", original = "0f7d0d088b6ea936fb25b477722d734706fe8b40", sha = "";
+        String s = "", original = "simon", sha = "";
 
         String alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
 
         sha = SHA1(s);
-        while (!sha.equals(original)) {
+        while (!s.equals(original)) {
             s = nextString(s, alphabet);
-            sha = SHA1(s);
+           // sha = SHA1(s);
         }
         System.out.println(sha);
         System.out.println(s);
@@ -39,7 +39,8 @@ public class Practical5 {
     ////////////////////////////////////////////
     public static String nextString(String s, String alphabet) {
         int n = s.length();
-        String lhs = "", rhs = "";
+        String lhs = "";
+        char rhs ;
 
         // returns a if empty string
         if (n == 0) {
@@ -51,15 +52,15 @@ public class Practical5 {
         if (n > 1) {
             lhs = s.substring(0, n - 1);
         }
-        rhs = s.substring(n - 1);
+        rhs = s.charAt(n - 1);
         int index = alphabet.indexOf(rhs) + 1;
 
         // if check rhs = "9" 
-        if (rhs.equals(alphabet.substring(alphabet.length() - 1))) {
-            rhs = "" + alphabet.charAt(n);
+        if (rhs == alphabet.charAt(alphabet.length() - 1)) {
+            rhs =  alphabet.charAt(n);
             return nextString(lhs, alphabet) + rhs;
         } else {
-            rhs = "" + alphabet.charAt(index);
+            rhs = alphabet.charAt(index);
             return lhs + rhs;
         }
 
