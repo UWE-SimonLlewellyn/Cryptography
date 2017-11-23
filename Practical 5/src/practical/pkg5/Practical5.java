@@ -22,17 +22,17 @@ public class Practical5 {
      */
     public static void main(String[] args) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         // TODO code application logic here
-        String s = "", original = "simon", sha = "";
+        String s = "", cypherText = "0f7d0d088b6ea936fb25b477722d734706fe8b40", sha = "";
 
         String alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
 
-        sha = SHA1(s);
-        while (!s.equals(original)) {
+        sha = SHA1(s); // check for empty string
+        while (!sha.equals(cypherText)) {
             s = nextString(s, alphabet);
-           // sha = SHA1(s);
+            sha = SHA1(s); //Bottle neck 
         }
-        System.out.println(sha);
-        System.out.println(s);
+        System.out.println(sha); // print cyper text
+        System.out.println(s); // print decoded message
 
     }
 
