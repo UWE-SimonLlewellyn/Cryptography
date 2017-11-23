@@ -20,55 +20,50 @@ public class Practical5 {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         // TODO code application logic here
-        String s = "", original = "simon";
+        String s = "", original = "0f7d0d088b6ea936fb25b477722d734706fe8b40", sha = "";
 
+        String alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
 
-      String alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
-      
-      
-       while(!s.equals(original)) {
-           s = nextString(s, alphabet);
-           System.out.println(s);
-       }
-   
+        sha = SHA1(s);
+        while (!sha.equals(original)) {
+            s = nextString(s, alphabet);
+            sha = SHA1(s);
+        }
+        System.out.println(sha);
+        System.out.println(s);
+
     }
 
-    
     ////////////////////////////////////////////
-    public static String nextString(String s, String alphabet ){
-        int n  = s.length();
+    public static String nextString(String s, String alphabet) {
+        int n = s.length();
         String lhs = "", rhs = "";
-   
+
         // returns a if empty string
-        if(n == 0) {
-              return  "" + alphabet.charAt(n);                  
-        }               
-     
+        if (n == 0) {
+            return "" + alphabet.charAt(n);
+        }
+
         // if string larger than 2 split into lhs an drhs
         // eg s = "simon", n = 5, lhs = "simo", rhs = "n"
-        if(n>1){
-            lhs = s.substring(0, n-1);               
+        if (n > 1) {
+            lhs = s.substring(0, n - 1);
         }
-        rhs = s.substring(n-1);
+        rhs = s.substring(n - 1);
         int index = alphabet.indexOf(rhs) + 1;
-        
-        
+
         // if check rhs = "9" 
-        if(rhs.equals(alphabet.substring(alphabet.length()-1))){            
-             rhs = "" + alphabet.charAt(n);
-             // unable to keep track of lhs position in call
-             return nextString(lhs, alphabet) + rhs;
-        }
-        else{
-            rhs = "" + alphabet.charAt(index);  
+        if (rhs.equals(alphabet.substring(alphabet.length() - 1))) {
+            rhs = "" + alphabet.charAt(n);
+            return nextString(lhs, alphabet) + rhs;
+        } else {
+            rhs = "" + alphabet.charAt(index);
             return lhs + rhs;
         }
 
-    
     }
-
 
     private static String convertToHex(byte[] data) {
         StringBuffer buf = new StringBuffer();
