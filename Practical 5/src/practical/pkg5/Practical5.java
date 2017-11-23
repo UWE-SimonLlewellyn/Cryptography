@@ -24,41 +24,27 @@ public class Practical5 {
         // TODO code application logic here
         String s = "", original = "simon";
 
-        int index = 0;
 
       String alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
       
       
-//         char[] alphabet = {'a','b','c','d','e','f','g','h','i','j','k','l','m',
-//                            'n','o','p','q','r','s','t','u','v','w','x','y','z',
-//                            '0','1','2','3','4','5','6','7','8','9'   };
-       
-
-//String[] alphabet = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
-//            "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
-//            "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
-
-       
        while(!s.equals(original)) {
-           s = nextString(s, alphabet, index++);
+           s = nextString(s, alphabet);
            System.out.println(s);
-        }
-
+       }
    
     }
 
     
     ////////////////////////////////////////////
-    public static String nextString(String s, String alphabet , int index ){
-        index = index % alphabet.length(); // only ever 0-35 = to pos in alphabet
+    public static String nextString(String s, String alphabet ){
         int n  = s.length();
         String lhs = "", rhs = "";
    
         // returns a if empty string
         if(n == 0) {
-              return  "" + alphabet.charAt(index);                  
-        }
-               
+              return  "" + alphabet.charAt(n);                  
+        }               
      
         // if string larger than 2 split into lhs an drhs
         // eg s = "simon", n = 5, lhs = "simo", rhs = "n"
@@ -66,14 +52,14 @@ public class Practical5 {
             lhs = s.substring(0, n-1);               
         }
         rhs = s.substring(n-1);
+        int index = alphabet.indexOf(rhs) + 1;
         
         
         // if check rhs = "9" 
         if(rhs.equals(alphabet.substring(alphabet.length()-1))){            
-             rhs = "" + alphabet.charAt(index);
+             rhs = "" + alphabet.charAt(n);
              // unable to keep track of lhs position in call
-             //            
-             return nextString(lhs, alphabet, index) + rhs;
+             return nextString(lhs, alphabet) + rhs;
         }
         else{
             rhs = "" + alphabet.charAt(index);  
