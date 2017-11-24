@@ -8,6 +8,7 @@ package practical.pkg5;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,14 +26,20 @@ public class Practical5 {
         String s = "", cypherText = "0f7d0d088b6ea936fb25b477722d734706fe8b40", sha = "";
 
         String alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
-
+        
+        long timer = System.currentTimeMillis();
+        
         sha = SHA1(s); // check for empty string
         while (!sha.equals(cypherText)) {
             s = nextString(s, alphabet);
-            sha = SHA1(s); //Bottle neck 
+            sha = SHA1(s); //Bottle neck if commented out over 10 times faster 
         }
+                  
+        timer = System.currentTimeMillis() - timer;
+        System.out.println("Time taken is " + timer/1000 + " seconds");
         System.out.println(sha); // print cyper text
         System.out.println(s); // print decoded message
+        
 
     }
 
@@ -44,7 +51,7 @@ public class Practical5 {
 
         // returns a if empty string
         if (n == 0) {
-            return "" + alphabet.charAt(n);
+            return "" + alphabet.charAt(0);
         }
 
         // if string larger than 2 split into lhs an drhs
@@ -57,7 +64,7 @@ public class Practical5 {
 
         // if check rhs = "9" 
         if (rhs == alphabet.charAt(alphabet.length() - 1)) {
-            rhs =  alphabet.charAt(n);
+            rhs =  alphabet.charAt(0);
             return nextString(lhs, alphabet) + rhs;
         } else {
             rhs = alphabet.charAt(index);
@@ -92,4 +99,5 @@ public class Practical5 {
         sha1hash = md.digest();
         return convertToHex(sha1hash);
     }
+    
 }
