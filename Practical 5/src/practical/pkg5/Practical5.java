@@ -46,8 +46,10 @@ public class Practical5 {
     ////////////////////////////////////////////
     public static String nextString(String s, String alphabet) {
         int n = s.length();
-        String lhs = "";
-        char rhs ;
+        String lhs = ""; // left hand side 
+        char rhs; // right hand side
+        char last = alphabet.charAt(alphabet.length() - 1);
+        
 
         // returns a if empty string
         if (n == 0) {
@@ -63,7 +65,7 @@ public class Practical5 {
         int index = alphabet.indexOf(rhs) + 1;
 
         // if check rhs = "9" 
-        if (rhs == alphabet.charAt(alphabet.length() - 1)) {
+        if (rhs == last) {
             rhs =  alphabet.charAt(0);
             return nextString(lhs, alphabet) + rhs;
         } else {
