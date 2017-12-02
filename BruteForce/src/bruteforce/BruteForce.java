@@ -7,7 +7,6 @@ package bruteforce;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
@@ -24,17 +23,10 @@ public class BruteForce extends javax.swing.JFrame {
      */
     public BruteForce() {
         initComponents();
-        myOwnSetup();
     }
 
-    private NextString stringMan;
-    private Sha_1 shaMan;
+    // Gloabal string for the alphabet.
     String alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
-
-    public void myOwnSetup() {
-        stringMan = new NextString();
-        shaMan = new Sha_1();
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -148,24 +140,21 @@ public class BruteForce extends javax.swing.JFrame {
         String cypherText = hashText.getText();
         String s = "", sAfterHash = "";
         long timer = System.currentTimeMillis();
-
-        results.setText(cypherText + "\n"); // display hashed text
-
+        
         while (!sAfterHash.equals(cypherText)) {
             s = NextString.nextString(s, alphabet);
             try {
-                sAfterHash = shaMan.SHA1(s); //Bottle neck if commented out over 10 times faster 
-            } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(BruteForce.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnsupportedEncodingException ex) {
+                sAfterHash = Sha_1.SHA1(s); 
+            } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
                 Logger.getLogger(BruteForce.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
+        //times to complete in milliseconds
         timer = System.currentTimeMillis() - timer;
-
+        //Conver time to minutes:seconds:milliseconds
         String times = new SimpleDateFormat("mm:ss:SSS").format(new Date(timer));
-
+        //Display hash, decyrpted text and time in results box. 
         results.setText("Hash:    " + cypherText + "\nDecryped: " + s + "\nRime:   " + times);
 
 
@@ -181,7 +170,7 @@ public class BruteForce extends javax.swing.JFrame {
         String hashed = "Error";
 
         try {
-            hashed = shaMan.SHA1(s);
+            hashed = Sha_1.SHA1(s);
 
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(BruteForce.class.getName()).log(Level.SEVERE, null, ex);
