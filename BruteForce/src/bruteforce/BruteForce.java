@@ -155,7 +155,7 @@ public class BruteForce extends javax.swing.JFrame {
         //Conver time to minutes:seconds:milliseconds
         String times = new SimpleDateFormat("mm:ss:SSS").format(new Date(timer));
         //Display hash, decyrpted text and time in results box. 
-        results.setText("Hash:    " + cypherText + "\nDecryped: " + s + "\nRime:   " + times);
+        results.setText("Hash:    " + cypherText + "\nDecryped: " + s + "\nRun Time:   " + times);
 
 
     }//GEN-LAST:event_crackHashActionPerformed
