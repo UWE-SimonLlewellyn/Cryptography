@@ -49,6 +49,7 @@ public class BruteForce extends javax.swing.JFrame {
         clear = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Recursive Brute Force Password Cracker");
 
         plainText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
