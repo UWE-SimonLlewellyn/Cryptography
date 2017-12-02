@@ -8,9 +8,7 @@ package practical.pkg5;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -23,7 +21,7 @@ public class Practical5 {
      */
     public static void main(String[] args) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         // TODO code application logic here
-        String s = "", cypherText = "0f7d0d088b6ea936fb25b477722d734706fe8b40", sha = "";
+        String s = "", cypherText = "4bcc3a95bdd9a11b28883290b03086e82af90212", sha = "";
 
         String alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
         
