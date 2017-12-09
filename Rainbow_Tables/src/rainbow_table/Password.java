@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rainbows;
+package rainbow_table;
 
 import java.util.HashMap;
 

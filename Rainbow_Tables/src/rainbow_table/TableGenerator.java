@@ -3,16 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rainbows;
+package rainbow_table;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Random;
-import java.util.Set;
-import static rainbows.Rainbows.*;
 
 /**
  *
@@ -41,7 +38,7 @@ public class TableGenerator {
      */
     public static BigInteger passwordSpace(int sizeOfAlphabet, int maxLengthPassword) {
         BigInteger space = new BigInteger("0"); // set to 
-        for (int i = maxLengthPassword; i >= 0; i--) {
+        for (int i = maxLengthPassword; i > 0; i--) {
             BigInteger temp = new BigInteger("" + (int) Math.pow(sizeOfAlphabet, i));
             space = space.add(temp);
         }
@@ -60,10 +57,6 @@ public class TableGenerator {
             r = new BigInteger(space.bitLength(), rnd);
         } while (r.compareTo(space) >= 0);
         return r.toString();
-//        hashed = Sha_1.SHA1(random);
-//
-//        return redman.reduce(hashed, 1);
-
     }
 
     public static String buildChain(String start, int chainLength) throws NoSuchAlgorithmException, UnsupportedEncodingException {
