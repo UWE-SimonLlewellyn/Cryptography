@@ -11,24 +11,26 @@ import java.util.HashMap;
 
 public class Rainbows {
 
-    
-    // "abcdefghijklmnopqrstuvwxyz";
+    public static String rainbowtable = "RainbowTable.ser";
+    public static TableToFile deserializer = new TableToFile();
 
+    /**
+     * @param args
+     * @throws java.security.NoSuchAlgorithmException
+     * @throws java.io.UnsupportedEncodingException
+     */
     public static void main(String[] args) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        TableToFile.fileAvailble(rainbowtable);
+        HashMap start = deserializer.loadRainbowTable(rainbowtable);
         String alphabet = "0123456789";
         int maxLength = 8, chainLength = 5000;
-//        String test = Sha_1.SHA1("0000");
-//        TableGenerator tet = new TableGenerator(alphabet);
-//        
-//        String newtest = tet.buildChain(test,5000);
-        
-        TableGenerator tableMan = new TableGenerator(alphabet);
-        HashMap start = tableMan.createMap(maxLength, chainLength);
-        
+        if (start.size() < 1) {
+            TableGenerator tableMan = new TableGenerator(alphabet);
+            start = tableMan.createMap(maxLength, chainLength);
+            TableToFile.saveHashMapToFile(start,rainbowtable);
+        }
         System.out.println("df");
-        
 
     }
-
 
 }
