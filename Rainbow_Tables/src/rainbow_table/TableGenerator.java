@@ -39,7 +39,7 @@ public class TableGenerator {
     public static BigInteger passwordSpace(int sizeOfAlphabet, int maxLengthPassword) {
         BigInteger space = new BigInteger("0"); // set to 
         for (int i = maxLengthPassword; i >= 0; i--) {
-            BigInteger temp = new BigInteger("" + (int) Math.pow(sizeOfAlphabet, i));   
+            BigInteger temp = new BigInteger("" + (int) Math.pow(sizeOfAlphabet, i));
             space = space.add(temp);
         }
         return space;
@@ -56,24 +56,41 @@ public class TableGenerator {
         do {
             r = new BigInteger(space.bitLength(), rnd);
         } while (r.compareTo(space) >= 0);
-        random = r.toString();        
-        return redman.reduce(Sha_1.SHA1(random),1);
-        
+        random = r.toString();
+        return redman.reduce(Sha_1.SHA1(random), 1);
+
     }
 
     public static String buildChain(String start, int chainLength) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        String end = start;
-        for (int i = 1; i <= chainLength; i++) {
-            end = redman.reduce(Sha_1.SHA1(end), i);
+        HashMap chain = new HashMap<>(); //stores values in chain for check if preexisiting pair in chain 
+        String end = start, temp = "";
+
+        /*
+            Chain stores values to check if a pair of values in chain 
+            Will avoid cirles within chain.
+            Eg.         a=>b, b=>c, c=>d, d=>e
+            Error if:   a=>b, b=>c, c=>a, a=>b 
+        */
+        end = redman.reduce(Sha_1.SHA1(start), 1);
+        for (int i = 2; i <= chainLength; i++) {
+            temp = redman.reduce(Sha_1.SHA1(end), i);
+            if ((chain.containsKey(end))
+                    && (temp.equals(chain.get(end).toString()))) {
+                return "False";
+            } else {
+                chain.put(end, temp);
+            }
+            end = temp;
         }
         return end;
     }
 
-    public  HashMap createMap(int maxLength, int chainLength) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    public HashMap createMap(int maxLength, int chainLength) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         BigInteger space = passwordSpace(alphabet.length(), maxLength);
         int num = numberOfChains(space, chainLength).intValue();
         HashMap start = new HashMap<>();
         HashMap pairs = new HashMap<>();
+
 
         String tempStart, tempEnd;
         for (int i = num; i > 0; i--) {
@@ -85,16 +102,22 @@ public class TableGenerator {
                 // if start point unique add to start table
                 start.put(tempStart, 0);
                 // build chain from start point
+                // returns False if chain has duplicate values within
                 tempEnd = buildChain(tempStart, chainLength);
-                // check if end point of chain is unique
-                if (pairs.containsKey(tempEnd)) {
-                    // if end point already exists replace lost itternation
-                    // and remove start value from start map 
+                if (!tempEnd.equals("False")) {
+                    // check if end point of chain is unique
+                    if (pairs.containsKey(tempEnd)) {
+                        // if end point already exists replace lost itternation
+                        // and remove start value from start map 
+                        i++;
+                        start.remove(tempStart);
+                    } else {
+                        // if both start and end are unquie store in table
+                        pairs.put(tempEnd, tempStart);
+                    }
+                } else {
                     i++;
                     start.remove(tempStart);
-                } else {
-                    // if both start and end are unquie store in table
-                    pairs.put(tempEnd, tempStart);
                 }
             }
         }
