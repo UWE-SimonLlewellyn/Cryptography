@@ -25,7 +25,7 @@ public class Rainbows {
         String alphabet = "0123456789";
         int maxLength = 8, chainLength = 5000;
         if (start.size() < 1) {
-            TableGenerator tableMan = new TableGenerator(alphabet);
+            TableGenerator tableMan = new TableGenerator(alphabet, maxLength);
             start = tableMan.createMap(maxLength, chainLength);
             FileToTable.saveHashMapToFile(start,rainbowtable);
         }

@@ -27,10 +27,10 @@ public class Reduction {
 
     }
 
-    public Reduction(String alphabet) {
+    public Reduction(String alphabet, int maxLength) {
 
         this.alphabet = alphabet;
-        this.maxLength = 8;
+        this.maxLength = maxLength;
         this.passwordSpace = TableGenerator.passwordSpace(this.alphabet.length(), this.maxLength);
         this.p = passwordSpace.nextProbablePrime();
 

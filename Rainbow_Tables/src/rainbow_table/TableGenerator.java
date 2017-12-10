@@ -24,9 +24,9 @@ public class TableGenerator {
 
     }
 
-    public TableGenerator(String alphabet) {
+    public TableGenerator(String alphabet, int maxLength) {
         this.alphabet = alphabet;
-        this.redman = new Reduction(alphabet);
+        this.redman = new Reduction(alphabet, maxLength);
     }
 
     HashMap pairs;
