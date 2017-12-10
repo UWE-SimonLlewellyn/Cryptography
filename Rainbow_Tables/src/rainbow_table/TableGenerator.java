@@ -56,7 +56,9 @@ public class TableGenerator {
         do {
             r = new BigInteger(space.bitLength(), rnd);
         } while (r.compareTo(space) >= 0);
-        return r.toString();
+        random = r.toString();        
+        return redman.reduce(Sha_1.SHA1(random),1);
+        
     }
 
     public static String buildChain(String start, int chainLength) throws NoSuchAlgorithmException, UnsupportedEncodingException {

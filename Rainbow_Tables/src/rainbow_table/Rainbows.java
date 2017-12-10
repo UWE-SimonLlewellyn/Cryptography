@@ -29,6 +29,7 @@ public class Rainbows {
             start = tableMan.createMap(maxLength, chainLength);
             FileToTable.saveHashMapToFile(start,rainbowtable);
         }
+
         System.out.println("df");
 
     }
