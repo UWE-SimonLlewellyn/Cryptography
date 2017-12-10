@@ -38,7 +38,7 @@ public class TableGenerator {
      */
     public static BigInteger passwordSpace(int sizeOfAlphabet, int maxLengthPassword) {
         BigInteger space = new BigInteger("0"); // set to 
-        for (int i = maxLengthPassword; i > 0; i--) {
+        for (int i = maxLengthPassword; i >= 0; i--) {
             BigInteger temp = new BigInteger("" + (int) Math.pow(sizeOfAlphabet, i));   
             space = space.add(temp);
         }
