@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class Rainbows {
 
     public static String rainbowtable = "RainbowTable.ser";
-    public static TableToFile deserializer = new TableToFile();
+    public static FileToTable deserializer = new FileToTable();
 
     /**
      * @param args
@@ -20,14 +20,14 @@ public class Rainbows {
      * @throws java.io.UnsupportedEncodingException
      */
     public static void main(String[] args) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        TableToFile.fileAvailble(rainbowtable);
+        FileToTable.fileAvailble(rainbowtable);
         HashMap start = deserializer.loadRainbowTable(rainbowtable);
         String alphabet = "0123456789";
         int maxLength = 8, chainLength = 5000;
         if (start.size() < 1) {
             TableGenerator tableMan = new TableGenerator(alphabet);
             start = tableMan.createMap(maxLength, chainLength);
-            TableToFile.saveHashMapToFile(start,rainbowtable);
+            FileToTable.saveHashMapToFile(start,rainbowtable);
         }
         System.out.println("df");
 
