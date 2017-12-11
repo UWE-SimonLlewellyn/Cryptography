@@ -18,14 +18,16 @@ import java.util.Random;
 public class TableGenerator {
 
     String alphabet;
+    int chainLength;
     static Reduction redman = new Reduction();
 
     public TableGenerator() {
 
     }
 
-    public TableGenerator(String alphabet, int maxLength) {
+    public TableGenerator(String alphabet, int maxLength, int chainLength) {
         this.alphabet = alphabet;
+        this.chainLength = chainLength;
         this.redman = new Reduction(alphabet, maxLength);
     }
 
@@ -50,7 +52,7 @@ public class TableGenerator {
     }
 
     public static String createStartValues(BigInteger space) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        String random = "", hashed = "";
+        String random = "";
         BigInteger r;
         Random rnd = new Random();
         do {
