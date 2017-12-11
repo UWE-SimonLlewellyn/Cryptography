@@ -5,7 +5,9 @@
  */
 package rainbow_table;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 
 /**
  *
@@ -38,21 +40,21 @@ public class Reduction {
         // change hash to big int change
         // adding pos means the reduce funtion has changed on each poitn of the cahine
 
-        BigInteger bigPos = BigInteger.valueOf(pos+1);
-        BigInteger n = processAscii(hashed);
+       // BigInteger bigPos = BigInteger.valueOf(pos+1);
+        BigInteger n = processHash(hashed, pos);        
         n = n.mod(p);
-        n= n.multiply(bigPos);     
-        n = n.mod(p);
+//        n= n.multiply(bigPos);     
+//        n = n.mod(p);
 
         return intToString(n.intValue(), alphabet);
 
     }
 
-    public String chainReduce(String hash, int pos, int chainLength) {
+    public String chainReduce(String hash, int pos, int chainLength) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         String pwd = reduce(hash, pos);
         while (pos != chainLength) {
             pos++;
-            pwd = reduce(hash, pos);  // R at pos
+            pwd = reduce(Sha_1.SHA1(pwd), pos);              
         }
         return pwd;
     }
@@ -78,12 +80,12 @@ public class Reduction {
     // ascci value of each hash. This should avoid duplicate BigIntegers values
     // eg a = 10, b = 15, c = 21
     // abc = 101521, bca = 152110, cba = 211510
-    public static BigInteger processAscii(String hashed) {
+    public static BigInteger processHash(String hashed, int pos) {
         String c = "";
         for (int i = 0; i < hashed.length(); i++) {
             c = c + (int) hashed.charAt(i);
         }
-        //    c = pos + c; // added the current pos on to fron tof the number
+       // c = pos + c; // added the current pos on to fron tof the number
         BigInteger count = new BigInteger(c);
         return count;
     }

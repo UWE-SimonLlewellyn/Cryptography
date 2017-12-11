@@ -332,61 +332,88 @@ public class Gui extends javax.swing.JFrame {
             boolean match = false;
             int chainLength = start.chainLength;
             String hashedInput = cypherText, reduString = "", startOfChain = "";
-                 
+
             int pos = chainLength;
             int count = pos;
             while (count > 0) {
                 for (int i = pos; i > 0; i--) {
                     count--;
-                    reduString = reduceMan.chainReduce(hashedInput, i, chainLength);
-                    if (pairs.containsKey(reduString)) {
-                        startOfChain = pairs.get(reduString).toString();
-                        match = true;
-                        pos = i;
+                    try {
+                        reduString = reduceMan.chainReduce(hashedInput, i, chainLength);
+                    } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+                        Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+//                    int pos1 = i;
+//                    String pwd = reduceMan.reduce(hashedInput, pos1);
+//                    while (pos1 != chainLength) {
+//                        pos1++;
+//                        pwd = reduceMan.reduce(hashedInput, pos1);
+//                    }
+//                    reduString = pwd;
+//                
+
+                if (pairs.containsKey(reduString)) {
+                    startOfChain = pairs.get(reduString).toString();
+                    match = true;
+                    pos = i;
+                    break;
+                }
+                try {
+                    hashedInput = Sha_1.SHA1(reduString);
+                } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+                    Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+
+            //
+            // Below recreated the chain from the starting position. 
+            //
+            String hashed = "";
+            String nextInChain = startOfChain;
+            if (match) {
+                match = false;
+                for (int i = 0; i <= chainLength; i++) {
+                    try {
+                        hashed = Sha_1.SHA1(nextInChain);
+                    } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+                        Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    if (hashed.equals(cypherText)) {
+                        result = nextInChain;
+                        count = 0;
                         break;
                     } else {
-                        try {
-                            hashedInput = Sha_1.SHA1(reduString);
-                        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-                            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }                   
-                }
-
-                String hashed = "";
-                String nextInChain = startOfChain;
-                if (match) {
-                    match = false;
-                    for (int i = 0; i < chainLength; i++) {
-                        try {
-                            hashed = Sha_1.SHA1(nextInChain); 
-                        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-                            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-
-                        //               cypherText = reduceMan.reduce(cypherText, 1);
-                        if (hashed.equals(cypherText)) {
-                            result = nextInChain;
-                            count = 0;
-                            break;
-                        } else {
-                            nextInChain = reduceMan.reduce(hashed, i);
-                        }
+                        nextInChain = reduceMan.reduce(hashed, i);
                     }
                 }
+                try {
+                    hashedInput = Sha_1.SHA1(reduString);
+                } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+                    Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                if (count != 0) {
+                    pos = count;
+                }
             }
-            //////////end crack code//////////////
-            //times to complete in milliseconds
-            timer = System.currentTimeMillis() - timer;
-            //Conver time to minutes:seconds:milliseconds
-            String times = new SimpleDateFormat("mm:ss:SSS").format(new Date(timer));
-            //Display hash, decyrpted text and time in results box.
-            results.setText("Hash:    " + cypherText + "\nDecryped: " + result + "\nRun Time:   "
-                    + times + "\nAlphabet: " + start.alphabet + "\nMax password legnth: " + start.maxLength);
-
-        } else {
-            results.setText("No Table on file. Please create table.");
         }
+        //////////end crack code//////////////
+        //times to complete in milliseconds
+        timer = System.currentTimeMillis() - timer;
+        //Conver time to minutes:seconds:milliseconds
+        String times = new SimpleDateFormat("mm:ss:SSS").format(new Date(timer));
+        //Display hash, decyrpted text and time in results box.
+        results.setText("Hash:    " + cypherText + "\nDecryped: " + result + "\nRun Time:   "
+                + times + "\nAlphabet: " + start.alphabet + "\nMax password legnth: " + start.maxLength);
+
+    }
+
+    
+        else {
+            results.setText("No Table on file. Please create table.");
+    }
     }//GEN-LAST:event_crackHashActionPerformed
 
     private void alphabetTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alphabetTextActionPerformed
@@ -428,8 +455,12 @@ public class Gui extends javax.swing.JFrame {
                 start.setMaxLength(maxLength);
                 start.setChainLength(chainLength);
                 FileToTable.saveHashMapToFile(start, rainbowtable);
-            } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                reduceMan = new Reduction(start.alphabet, start.maxLength, start.chainLength);
+            
+
+} catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+                Logger.getLogger(Gui.class
+.getName()).log(Level.SEVERE, null, ex);
             }
             //times to complete in milliseconds
             timer = System.currentTimeMillis() - timer;
@@ -460,16 +491,28 @@ public class Gui extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                }
+                
+
+}
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Gui.class
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        
+
+} catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Gui.class
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        
+
+} catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Gui.class
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        
+
+} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Gui.class
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         FileToTable.fileAvailble(rainbowtable);
