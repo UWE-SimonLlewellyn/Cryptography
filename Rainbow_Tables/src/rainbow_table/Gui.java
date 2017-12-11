@@ -368,7 +368,8 @@ public class Gui extends javax.swing.JFrame {
             ///////////////////////////for code to crack hash///////
             s = cypherText;
             int pos = chainLength;
-            while (pos != 0) {
+            int count = pos;
+            while (count != 0) {
                 for (int i = pos; i > 0; i--) {
                     s = reduceMan.chainReduce(s, i, chainLength);
                     if (pairs.containsKey(s)) {
@@ -383,6 +384,7 @@ public class Gui extends javax.swing.JFrame {
                             Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
+                    count = i;
                 }
 
                 String hashed = "";
