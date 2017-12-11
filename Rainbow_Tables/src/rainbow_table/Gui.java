@@ -327,60 +327,26 @@ public class Gui extends javax.swing.JFrame {
 
         if (pairs.size() > 0) {
             String cypherText = hashText.getText();
-            String s = "", startValue = "", result = "Not Found";
+            String result = "Not Found";
             long timer = System.currentTimeMillis();
             boolean match = false;
             int chainLength = start.chainLength;
-//////
-//////            ///////////////////////////for code to crack hash///////
-//////            s = cypherText;
-//////            for (int i = 5000; i > 0; i--) {
-//////                s = reduceMan.reduce(s, i);
-//////                if (pairs.containsKey(s)) {
-//////                    s = pairs.get(s).toString();
-//////                    match = true;
-//////                    break;
-//////                } else {
-//////                    //                try {
-//////                    //                    s = Sha_1.SHA1(s);
-//////                    //                } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-//////                    //                    Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-//////                    //                }
-//////                }
-//////            }
-//////            String hashed = "";
-//////            if (match) {
-//////                for (int i = 1; i <= 5000; i++) {
-//////                    try {
-//////                        hashed = Sha_1.SHA1(s);
-//////                    } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-//////                        Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-//////                    }
-//////
-//////                    if (hashed.equals(cypherText)) {
-//////                        result = s;
-//////                    } else {
-//////                        s = reduceMan.reduce(s, i);
-//////                    }
-//////
-//////                }
-//////            }
-            ///////////////////////////for code to crack hash///////
-            s = cypherText;
+            String hashedInput = cypherText, reduString = "", startOfChain = "";
+                 
             int pos = chainLength;
             int count = pos;
             while (count > 0) {
                 for (int i = pos; i > 0; i--) {
                     count--;
-                    s = reduceMan.chainReduce(s, i, chainLength);
-                    if (pairs.containsKey(s)) {
-                        s = pairs.get(s).toString();
+                    reduString = reduceMan.chainReduce(hashedInput, i, chainLength);
+                    if (pairs.containsKey(reduString)) {
+                        startOfChain = pairs.get(reduString).toString();
                         match = true;
                         pos = i;
                         break;
                     } else {
                         try {
-                            s = Sha_1.SHA1(s);
+                            hashedInput = Sha_1.SHA1(reduString);
                         } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
                             Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -388,21 +354,23 @@ public class Gui extends javax.swing.JFrame {
                 }
 
                 String hashed = "";
+                String nextInChain = startOfChain;
                 if (match) {
                     match = false;
-                    for (int i = 1; i <= chainLength; i++) {
+                    for (int i = 0; i < chainLength; i++) {
                         try {
-                            hashed = Sha_1.SHA1(s);
+                            hashed = Sha_1.SHA1(nextInChain); 
                         } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
                             Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
                         }
 
                         //               cypherText = reduceMan.reduce(cypherText, 1);
                         if (hashed.equals(cypherText)) {
-                            result = s;
+                            result = nextInChain;
+                            count = 0;
                             break;
                         } else {
-                            s = reduceMan.reduce(s, i);
+                            nextInChain = reduceMan.reduce(hashed, i);
                         }
                     }
                 }

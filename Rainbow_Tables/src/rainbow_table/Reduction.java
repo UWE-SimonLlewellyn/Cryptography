@@ -15,12 +15,13 @@ public class Reduction {
 
     String alphabet = "";
     int maxLength = 0;
-    BigInteger passwordSpace = TableGenerator.passwordSpace(alphabet.length(), maxLength);;
-    BigInteger p = passwordSpace.nextProbablePrime();    
+    BigInteger passwordSpace = TableGenerator.passwordSpace(alphabet.length(), maxLength);
+    ;
+    BigInteger p = passwordSpace.nextProbablePrime();
     int chainLength = 0;
 
     public Reduction() {
-        
+
     }
 
     public Reduction(String alphabet, int maxLength, int chainLength) {
@@ -37,8 +38,10 @@ public class Reduction {
         // change hash to big int change
         // adding pos means the reduce funtion has changed on each poitn of the cahine
 
-        BigInteger bigPos = BigInteger.valueOf(pos);
-        BigInteger n = processAscii(hashed).multiply(bigPos);
+        BigInteger bigPos = BigInteger.valueOf(pos+1);
+        BigInteger n = processAscii(hashed);
+        n = n.mod(p);
+        n= n.multiply(bigPos);     
         n = n.mod(p);
 
         return intToString(n.intValue(), alphabet);
@@ -78,8 +81,9 @@ public class Reduction {
     public static BigInteger processAscii(String hashed) {
         String c = "";
         for (int i = 0; i < hashed.length(); i++) {
-            c = (int) hashed.charAt(i) + c;
+            c = c + (int) hashed.charAt(i);
         }
+        //    c = pos + c; // added the current pos on to fron tof the number
         BigInteger count = new BigInteger(c);
         return count;
     }

@@ -62,22 +62,21 @@ public class TableGenerator {
             r = new BigInteger(space.bitLength(), rnd);
         } while (r.compareTo(space) >= 0);
         random = r.toString();
-        return redman.reduce(Sha_1.SHA1(random), 1);
+        return redman.reduce(Sha_1.SHA1(random), 0);
 
     }
 
     public static String buildChain(String start, int chainLength) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         HashMap chain = new HashMap<>(); //stores values in chain for check if preexisiting pair in chain 
         String end = start, temp = "";
-
         /*
             Chain stores values to check if a pair of values in chain 
             Will avoid cirles within chain.
             Eg.         a=>b, b=>c, c=>d, d=>e
-            Error if:   a=>b, b=>c, c=>a, a=>b 
+            Removes if: a=>b, b=>c, c=>a, a=>b 
         */
-        end = redman.reduce(Sha_1.SHA1(start), 1);
-        for (int i = 2; i <= chainLength; i++) {
+        end = redman.reduce(Sha_1.SHA1(start), 0);
+        for (int i = 1; i < chainLength; i++) {
             temp = redman.reduce(Sha_1.SHA1(end), i);
             if ((chain.containsKey(end))
                     && (temp.equals(chain.get(end).toString()))) {
@@ -88,6 +87,23 @@ public class TableGenerator {
             end = temp;
         }
         return end;
+
+//        /*
+//         Checks for duplucated in the chain only
+//          Too many hits makes it impossible on lower sets
+//        */
+//        end = start; 
+//        for (int i = 0; i < chainLength; i++) {
+//            temp = redman.reduce(Sha_1.SHA1(end), i);
+//            if (chain.containsKey(temp))                     {
+//                return "False";
+//            } else {
+//                chain.put(temp, 0);
+//            }
+//            end = temp;
+//        }
+//        return end;
+
     }
 
     public HashMap createMap(int maxLength, int chainLength) throws NoSuchAlgorithmException, UnsupportedEncodingException {
@@ -104,12 +120,16 @@ public class TableGenerator {
             if (start.containsKey(tempStart)) {
                 i++; // start exsists in start map add 1 to count to make up for lost itteration
             } else {
-                // if start point unique add to start table
+                // if start point unique add to start map
                 start.put(tempStart, 0);
                 // build chain from start point
                 // returns False if chain has duplicate values within
                 tempEnd = buildChain(tempStart, chainLength);
-                if (!tempEnd.equals("False")) {
+                if (tempEnd.equals("False")) {     
+                    // If chain returns false ditch chain and find a new start number
+                    i++;
+                    start.remove(tempStart);
+                } else {
                     // check if end point of chain is unique
                     if (pairs.containsKey(tempEnd)) {
                         // if end point already exists replace lost itternation
@@ -119,10 +139,7 @@ public class TableGenerator {
                     } else {
                         // if both start and end are unquie store in table
                         pairs.put(tempEnd, tempStart);
-                    }
-                } else {
-                    i++;
-                    start.remove(tempStart);
+                    }                   
                 }
             }
         }
