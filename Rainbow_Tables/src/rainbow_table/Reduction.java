@@ -15,12 +15,11 @@ import java.security.NoSuchAlgorithmException;
  */
 public class Reduction {
 
-    String alphabet = "";
-    int maxLength = 0;
+    String alphabet = "0";
+    int maxLength = 1;
     BigInteger passwordSpace = TableGenerator.passwordSpace(alphabet.length(), maxLength);
-    ;
     BigInteger p = passwordSpace.nextProbablePrime();
-    int chainLength = 0;
+    int chainLength = 1;
 
     public Reduction() {
 

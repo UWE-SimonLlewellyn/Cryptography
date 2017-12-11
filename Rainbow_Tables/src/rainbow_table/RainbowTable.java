@@ -14,9 +14,9 @@ import java.util.HashMap;
  */
 public class RainbowTable implements Serializable {
 
-    public String alphabet;
-    public int maxLength;
-    public int chainLength;
+    public String alphabet = "";
+    public int maxLength = 0;
+    public int chainLength = 0;
     public HashMap pairs = new HashMap<>();
 
     public RainbowTable() {

@@ -27,9 +27,10 @@ public class Gui extends javax.swing.JFrame {
     /**
      * Creates new form Gui
      */
-    public Gui() {
+    public Gui() {   
         initComponents();
     }
+ 
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -517,7 +518,7 @@ public class Gui extends javax.swing.JFrame {
         //</editor-fold>
         FileToTable.fileAvailble(rainbowtable);
         RainbowTable start = deserializer.loadRainbowTable(rainbowtable);
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
