@@ -33,7 +33,7 @@ public class FileToTable {
         if (p.exists()) {
             // do something
         } else {
-            HashMap rainbowTable = new HashMap<>();
+            RainbowTable rainbowTable = new RainbowTable();
             saveHashMapToFile(rainbowTable, s);
         }
         
@@ -46,7 +46,7 @@ public class FileToTable {
      Saves report to a external file to all easy saving and loading 
      of records in the system.
      */
-    public static void saveHashMapToFile(HashMap r, String file) {
+    public static void saveHashMapToFile(RainbowTable r, String file) {
         try {
             // write object to file
             FileOutputStream fos = new FileOutputStream(file);
@@ -62,13 +62,13 @@ public class FileToTable {
     }
     
     
-        public HashMap loadRainbowTable(String file) {
-        HashMap rainbowTable;
+        public RainbowTable loadRainbowTable(String file) {
+        RainbowTable rainbowTable;
         try {
             // read object from file
             FileInputStream fis = new FileInputStream(file);
             try (ObjectInputStream ois = new ObjectInputStream(fis)) {
-                rainbowTable = (HashMap<String,String>) ois.readObject();
+                rainbowTable = (RainbowTable) ois.readObject();
             }
 
             return rainbowTable;

@@ -22,7 +22,7 @@ public class Gui extends javax.swing.JFrame {
     public static String rainbowtable = "RainbowTable.ser";
     public static FileToTable deserializer = new FileToTable();
     public static Reduction reduceMan = new Reduction();
-    public HashMap start = deserializer.loadRainbowTable(rainbowtable);
+    public RainbowTable start = deserializer.loadRainbowTable(rainbowtable);
 
     /**
      * Creates new form Gui
@@ -65,6 +65,7 @@ public class Gui extends javax.swing.JFrame {
         chainResults = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
         clear1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -78,6 +79,7 @@ public class Gui extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Rainbow Table Password Crack");
 
         crackHash.setText("Crack Hash");
         crackHash.addActionListener(new java.awt.event.ActionListener() {
@@ -91,7 +93,7 @@ public class Gui extends javax.swing.JFrame {
         clear.setText("Clear");
         clear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                clearActionPerformed(evt);
+                ClearPasswordForm(evt);
             }
         });
 
@@ -123,7 +125,6 @@ public class Gui extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(clear)
                     .addComponent(jLabel2)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(hashText, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -134,7 +135,8 @@ public class Gui extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(plainToHash))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel3)
+                    .addComponent(clear, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(61, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -161,12 +163,12 @@ public class Gui extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(clear)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(jLabel1)
-                    .addContainerGap(408, Short.MAX_VALUE)))
+                    .addContainerGap(405, Short.MAX_VALUE)))
         );
 
         jTabbedPane1.addTab("Crack Password", jPanel1);
@@ -204,14 +206,21 @@ public class Gui extends javax.swing.JFrame {
         jButton1.setText("Create Table");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                CreateTable(evt);
             }
         });
 
         clear1.setText("Clear");
         clear1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                clear1ActionPerformed(evt);
+                ClearTableForm(evt);
+            }
+        });
+
+        jButton2.setText("View Table Details");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ViewDetails(evt);
             }
         });
 
@@ -233,8 +242,9 @@ public class Gui extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(clear1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(45, Short.MAX_VALUE))
+                    .addComponent(clear1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -254,13 +264,15 @@ public class Gui extends javax.swing.JFrame {
                     .addComponent(chainLengthText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(clear1))
-                .addContainerGap(34, Short.MAX_VALUE))
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(clear1))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Create Table", jPanel3);
@@ -273,7 +285,10 @@ public class Gui extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 461, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -283,29 +298,34 @@ public class Gui extends javax.swing.JFrame {
 
         String s = plainText.getText();
         String hashed = "Error";
+        if (s.length() <= start.maxLength) {
+            try {
+                hashed = Sha_1.SHA1(s);
+            } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-        try {
-            hashed = Sha_1.SHA1(s);
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+            hashText.setText(hashed);
+        } else {
+            results.setText("Password larger than tables max password length");
         }
-
-        hashText.setText(hashed);
     }//GEN-LAST:event_plainToHashActionPerformed
 
     private void plainTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plainTextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_plainTextActionPerformed
 
-    private void clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearActionPerformed
+    private void ClearPasswordForm(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearPasswordForm
 
         plainText.setText("");
         hashText.setText("");
         results.setText("");
-    }//GEN-LAST:event_clearActionPerformed
+    }//GEN-LAST:event_ClearPasswordForm
 
     private void crackHashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crackHashActionPerformed
-        if (start.size() > 0) {
+        HashMap pairs = start.getPairs();
+
+        if (pairs.size() > 0) {
             String cypherText = hashText.getText();
             String s = "", startValue = "", result = "Not Found";
             long timer = System.currentTimeMillis();
@@ -315,8 +335,8 @@ public class Gui extends javax.swing.JFrame {
             s = cypherText;
             for (int i = 5000; i > 0; i--) {
                 s = reduceMan.reduce(s, i);
-                if (start.containsKey(s)) {
-                    s = start.get(s).toString();
+                if (pairs.containsKey(s)) {
+                    s = pairs.get(s).toString();
                     match = true;
                     break;
                 } else {
@@ -352,7 +372,9 @@ public class Gui extends javax.swing.JFrame {
             //Conver time to minutes:seconds:milliseconds
             String times = new SimpleDateFormat("mm:ss:SSS").format(new Date(timer));
             //Display hash, decyrpted text and time in results box.
-            results.setText("Hash:    " + cypherText + "\nDecryped: " + result + "\nRun Time:   " + times);
+            results.setText("Hash:    " + cypherText + "\nDecryped: " + result + "\nRun Time:   "
+                    + times + "\nAlphabet: " + start.alphabet + "\nMax password legnth: " + start.maxLength);
+
         } else {
             results.setText("No Table on file. Please create table.");
         }
@@ -370,41 +392,49 @@ public class Gui extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_maxLengthTextActionPerformed
 
-    private void clear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clear1ActionPerformed
+    private void ClearTableForm(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearTableForm
         alphabetText.setText("");
         maxLengthText.setText("");
         chainLengthText.setText("");
         chainResults.setText("");
-    }//GEN-LAST:event_clear1ActionPerformed
+    }//GEN-LAST:event_ClearTableForm
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void CreateTable(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateTable
         String alphabet = alphabetText.getText();
         String chainLengthString = chainLengthText.getText();
         String maxLengthString = maxLengthText.getText();
+
         if ((alphabet.equals(""))
                 || (chainLengthString.equals(""))
                 || (maxLengthString.equals(""))) {
             chainResults.setText("Please enter all the fields");
-        }
-        else{
+        } else {
             long timer = System.currentTimeMillis();// time table creation
             int chainLength = Integer.parseInt(chainLengthString);
             int maxLength = Integer.parseInt(maxLengthString);
-            TableGenerator tableManager = new TableGenerator(alphabet,  maxLength, chainLength);
+            TableGenerator tableManager = new TableGenerator(alphabet, maxLength, chainLength);
             try {
-                start = tableManager.createMap(maxLength, chainLength);
-                FileToTable.saveHashMapToFile(start,rainbowtable);
+                start.setPairs(tableManager.createMap(maxLength, chainLength));
+                start.setAlphabet(alphabet);
+                start.setMaxLength(maxLength);
+                FileToTable.saveHashMapToFile(start, rainbowtable);
             } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
                 Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
             }
             //times to complete in milliseconds
-        timer = System.currentTimeMillis() - timer;
-        //Conver time to minutes:seconds:milliseconds
-        String times = new SimpleDateFormat("mm:ss:SSS").format(new Date(timer));
-        //Display hash, decyrpted text and time in results box. 
-        chainResults.setText("Table created.\nRun Time:   " + times);
+            timer = System.currentTimeMillis() - timer;
+            //Conver time to minutes:seconds:milliseconds
+            String times = new SimpleDateFormat("mm:ss:SSS").format(new Date(timer));
+            //Display hash, decyrpted text and time in results box. 
+            chainResults.setText("Table created.\nRun Time:   " + times);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_CreateTable
+
+    private void ViewDetails(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewDetails
+
+        chainResults.setText("Alphabet: " + start.alphabet + "\nMax password legnth: " + start.maxLength + "\nPairs: " + start.pairs.toString());
+
+    }//GEN-LAST:event_ViewDetails
 
     /**
      * @param args the command line arguments
@@ -433,7 +463,7 @@ public class Gui extends javax.swing.JFrame {
         }
         //</editor-fold>
         FileToTable.fileAvailble(rainbowtable);
-        HashMap start = deserializer.loadRainbowTable(rainbowtable);
+        RainbowTable start = deserializer.loadRainbowTable(rainbowtable);
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -452,6 +482,7 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JButton crackHash;
     private javax.swing.JTextField hashText;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
