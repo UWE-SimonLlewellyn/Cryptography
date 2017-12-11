@@ -369,8 +369,9 @@ public class Gui extends javax.swing.JFrame {
             s = cypherText;
             int pos = chainLength;
             int count = pos;
-            while (count != 0) {
+            while (count > 0) {
                 for (int i = pos; i > 0; i--) {
+                    count--;
                     s = reduceMan.chainReduce(s, i, chainLength);
                     if (pairs.containsKey(s)) {
                         s = pairs.get(s).toString();
@@ -383,8 +384,7 @@ public class Gui extends javax.swing.JFrame {
                         } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
                             Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    }
-                    count = i;
+                    }                   
                 }
 
                 String hashed = "";
