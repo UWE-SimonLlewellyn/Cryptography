@@ -20,9 +20,10 @@ import java.util.logging.Logger;
 public class Gui extends javax.swing.JFrame {
 
     public static String rainbowtable = "RainbowTable.ser";
-    public static FileToTable deserializer = new FileToTable();    
+    public static FileToTable deserializer = new FileToTable();
     public RainbowTable start = deserializer.loadRainbowTable(rainbowtable);
-    public  Reduction reduceMan = new Reduction(start.alphabet, start.maxLength, start.chainLength);
+    public Reduction reduceMan = new Reduction(start.alphabet, start.maxLength, start.chainLength);
+
     /**
      * Creates new form Gui
      */
@@ -366,41 +367,44 @@ public class Gui extends javax.swing.JFrame {
 //////            }
             ///////////////////////////for code to crack hash///////
             s = cypherText;
-            for (int i = chainLength; i > 0; i--) {
-                s = reduceMan.chainReduce(s, i, chainLength);
-                if (pairs.containsKey(s)) {
-                    s = pairs.get(s).toString();
-                    match = true;
-                    break;
-                } else {
-                    try {
-                        s = Sha_1.SHA1(s);
-                    } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-                        Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-
-            String hashed = "";
-            if (match) {
-                for (int i = 1; i <= chainLength; i++) {
-                    try {
-                        hashed = Sha_1.SHA1(s);
-                    } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-                        Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
-     //               cypherText = reduceMan.reduce(cypherText, 1);
-                    if (hashed.equals(cypherText)) {
-                        result = s;
+            int pos = chainLength;
+            while (pos != 0) {
+                for (int i = pos; i > 0; i--) {
+                    s = reduceMan.chainReduce(s, i, chainLength);
+                    if (pairs.containsKey(s)) {
+                        s = pairs.get(s).toString();
+                        match = true;
+                        pos = i;
                         break;
                     } else {
-                        s = reduceMan.reduce(s, i);
+                        try {
+                            s = Sha_1.SHA1(s);
+                        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+                            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
+                }
 
+                String hashed = "";
+                if (match) {
+                    match = false;
+                    for (int i = 1; i <= chainLength; i++) {
+                        try {
+                            hashed = Sha_1.SHA1(s);
+                        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+                            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                        //               cypherText = reduceMan.reduce(cypherText, 1);
+                        if (hashed.equals(cypherText)) {
+                            result = s;
+                            break;
+                        } else {
+                            s = reduceMan.reduce(s, i);
+                        }
+                    }
                 }
             }
-
             //////////end crack code//////////////
             //times to complete in milliseconds
             timer = System.currentTimeMillis() - timer;
