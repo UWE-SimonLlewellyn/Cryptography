@@ -28,7 +28,6 @@ public class Gui extends javax.swing.JFrame {
      * Creates new form Gui
      */
     public Gui() {
-        //  FileToTable.fileAvailble(rainbowtable);
         initComponents();
     }
 
@@ -394,6 +393,7 @@ public class Gui extends javax.swing.JFrame {
             TableGenerator tableManager = new TableGenerator(alphabet,  maxLength, chainLength);
             try {
                 start = tableManager.createMap(maxLength, chainLength);
+                FileToTable.saveHashMapToFile(start,rainbowtable);
             } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
                 Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
             }
