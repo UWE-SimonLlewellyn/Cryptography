@@ -22,7 +22,7 @@ public class Gui extends javax.swing.JFrame {
     public static String rainbowtable = "RainbowTable.ser";
     public static FileToTable deserializer = new FileToTable();
     public static Reduction reduceMan = new Reduction();
-    public RainbowTable start = deserializer.loadRainbowTable(rainbowtable);
+    public RainbowTable start = new RainbowTable();
 
     /**
      * Creates new form Gui
@@ -330,11 +330,45 @@ public class Gui extends javax.swing.JFrame {
             String s = "", startValue = "", result = "Not Found";
             long timer = System.currentTimeMillis();
             boolean match = false;
-
+            int chainLength = start.chainLength;
+//////
+//////            ///////////////////////////for code to crack hash///////
+//////            s = cypherText;
+//////            for (int i = 5000; i > 0; i--) {
+//////                s = reduceMan.reduce(s, i);
+//////                if (pairs.containsKey(s)) {
+//////                    s = pairs.get(s).toString();
+//////                    match = true;
+//////                    break;
+//////                } else {
+//////                    //                try {
+//////                    //                    s = Sha_1.SHA1(s);
+//////                    //                } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+//////                    //                    Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+//////                    //                }
+//////                }
+//////            }
+//////            String hashed = "";
+//////            if (match) {
+//////                for (int i = 1; i <= 5000; i++) {
+//////                    try {
+//////                        hashed = Sha_1.SHA1(s);
+//////                    } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+//////                        Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+//////                    }
+//////
+//////                    if (hashed.equals(cypherText)) {
+//////                        result = s;
+//////                    } else {
+//////                        s = reduceMan.reduce(s, i);
+//////                    }
+//////
+//////                }
+//////            }
             ///////////////////////////for code to crack hash///////
             s = cypherText;
-            for (int i = 5000; i > 0; i--) {
-                s = reduceMan.reduce(s, i);
+            for (int i = chainLength; i > 0; i--) {
+                s = reduceMan.chainReduce(s, i, chainLength);
                 if (pairs.containsKey(s)) {
                     s = pairs.get(s).toString();
                     match = true;
@@ -350,7 +384,7 @@ public class Gui extends javax.swing.JFrame {
 
             String hashed = "";
             if (match) {
-                for (int i = 1; i <= 5000; i++) {
+                for (int i = 1; i <= chainLength; i++) {
                     try {
                         hashed = Sha_1.SHA1(s);
                     } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
@@ -417,6 +451,7 @@ public class Gui extends javax.swing.JFrame {
                 start.setPairs(tableManager.createMap(maxLength, chainLength));
                 start.setAlphabet(alphabet);
                 start.setMaxLength(maxLength);
+                start.setChainLength(chainLength);
                 FileToTable.saveHashMapToFile(start, rainbowtable);
             } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
                 Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);

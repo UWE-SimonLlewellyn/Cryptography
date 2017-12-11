@@ -19,6 +19,8 @@ public class TableGenerator {
 
     String alphabet;
     int chainLength;
+    int maxLength;
+    HashMap pairs = new HashMap<>();
     static Reduction redman = new Reduction();
 
     public TableGenerator() {
@@ -28,10 +30,11 @@ public class TableGenerator {
     public TableGenerator(String alphabet, int maxLength, int chainLength) {
         this.alphabet = alphabet;
         this.chainLength = chainLength;
-        this.redman = new Reduction(alphabet, maxLength);
+        this.maxLength=maxLength;
+        this.redman = new Reduction(alphabet, maxLength, chainLength);
     }
 
-    HashMap pairs;
+    
 
     /*   Password Space
     	a = sizeOfAlphabet;

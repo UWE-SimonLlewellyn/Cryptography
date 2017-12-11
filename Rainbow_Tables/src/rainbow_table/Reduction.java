@@ -17,20 +17,23 @@ public class Reduction {
     BigInteger passwordSpace;
     BigInteger p;
     int maxLength;
+    int chainLength;
 
     public Reduction() {
 
         this.alphabet = "0123456789";
         this.maxLength = 8;
+        this.chainLength = 5000;
         this.passwordSpace = TableGenerator.passwordSpace(alphabet.length(), maxLength);
         this.p = passwordSpace.nextProbablePrime();
 
     }
 
-    public Reduction(String alphabet, int maxLength) {
+    public Reduction(String alphabet, int maxLength, int chainLength) {
 
         this.alphabet = alphabet;
         this.maxLength = maxLength;
+        this.chainLength = chainLength;
         this.passwordSpace = TableGenerator.passwordSpace(this.alphabet.length(), this.maxLength);
         this.p = passwordSpace.nextProbablePrime();
 
@@ -46,6 +49,15 @@ public class Reduction {
 
         return intToString(n.intValue(), alphabet);
 
+    }
+
+    public String chainReduce(String hash, int pos, int chainLength) {
+        String pwd = reduce(hash, pos);
+        while (pos !=chainLength) {
+            pos++;
+            pwd = reduce(hash, pos);  // R at pos
+        }
+        return pwd;
     }
 
     /// this is just an example of a start of ascii code 
