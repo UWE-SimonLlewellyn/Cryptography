@@ -95,7 +95,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="327" max="32767" attributes="0"/>
+                          <EmptySpace pref="254" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -179,7 +179,7 @@
             </Container>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Enter Plain Text : { 0-9 } max 8 digits"/>
+                <Property name="text" type="java.lang.String" value="Enter Plain Text : (check table details for valid input)"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel2">

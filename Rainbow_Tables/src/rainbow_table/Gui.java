@@ -107,7 +107,7 @@ public class Gui extends javax.swing.JFrame {
         results.setRows(5);
         jScrollPane1.setViewportView(results);
 
-        jLabel1.setText("Enter Plain Text : { 0-9 } max 8 digits");
+        jLabel1.setText("Enter Plain Text : (check table details for valid input)");
 
         jLabel2.setText("Enter Hash Text");
 
@@ -142,7 +142,7 @@ public class Gui extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(jLabel1)
-                    .addContainerGap(327, Short.MAX_VALUE)))
+                    .addContainerGap(254, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
