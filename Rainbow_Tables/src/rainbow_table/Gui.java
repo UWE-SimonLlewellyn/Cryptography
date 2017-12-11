@@ -20,10 +20,9 @@ import java.util.logging.Logger;
 public class Gui extends javax.swing.JFrame {
 
     public static String rainbowtable = "RainbowTable.ser";
-    public static FileToTable deserializer = new FileToTable();
-    public static Reduction reduceMan = new Reduction();
-    public RainbowTable start = new RainbowTable();
-
+    public static FileToTable deserializer = new FileToTable();    
+    public RainbowTable start = deserializer.loadRainbowTable(rainbowtable);
+    public  Reduction reduceMan = new Reduction(start.alphabet, start.maxLength, start.chainLength);
     /**
      * Creates new form Gui
      */
@@ -374,11 +373,11 @@ public class Gui extends javax.swing.JFrame {
                     match = true;
                     break;
                 } else {
-                    //                try {
-                    //                    s = Sha_1.SHA1(s);
-                    //                } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-                    //                    Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-                    //                }
+                    try {
+                        s = Sha_1.SHA1(s);
+                    } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+                        Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
 
@@ -391,8 +390,10 @@ public class Gui extends javax.swing.JFrame {
                         Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
+     //               cypherText = reduceMan.reduce(cypherText, 1);
                     if (hashed.equals(cypherText)) {
                         result = s;
+                        break;
                     } else {
                         s = reduceMan.reduce(s, i);
                     }
@@ -467,7 +468,7 @@ public class Gui extends javax.swing.JFrame {
 
     private void ViewDetails(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewDetails
 
-        chainResults.setText("Alphabet: " + start.alphabet + "\nMax password legnth: " + start.maxLength + "\nPairs: " + start.pairs.toString());
+        chainResults.setText("Alphabet: " + start.alphabet + "\nMax password legnth: " + start.maxLength + "\nNumber of chains: " + start.pairs.size() + "\nPairs: " + start.pairs.toString());
 
     }//GEN-LAST:event_ViewDetails
 

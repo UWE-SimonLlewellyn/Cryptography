@@ -13,20 +13,14 @@ import java.math.BigInteger;
  */
 public class Reduction {
 
-    String alphabet;
-    BigInteger passwordSpace;
-    BigInteger p;
-    int maxLength;
-    int chainLength;
+    String alphabet = "";
+    int maxLength = 0;
+    BigInteger passwordSpace = TableGenerator.passwordSpace(alphabet.length(), maxLength);;
+    BigInteger p = passwordSpace.nextProbablePrime();    
+    int chainLength = 0;
 
     public Reduction() {
-
-        this.alphabet = "0123456789";
-        this.maxLength = 8;
-        this.chainLength = 5000;
-        this.passwordSpace = TableGenerator.passwordSpace(alphabet.length(), maxLength);
-        this.p = passwordSpace.nextProbablePrime();
-
+        
     }
 
     public Reduction(String alphabet, int maxLength, int chainLength) {
@@ -53,7 +47,7 @@ public class Reduction {
 
     public String chainReduce(String hash, int pos, int chainLength) {
         String pwd = reduce(hash, pos);
-        while (pos !=chainLength) {
+        while (pos != chainLength) {
             pos++;
             pwd = reduce(hash, pos);  // R at pos
         }
