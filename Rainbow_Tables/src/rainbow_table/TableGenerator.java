@@ -51,33 +51,31 @@ public class TableGenerator {
     }
 
     public static BigInteger numberOfChains(BigInteger space, int chainLength) {
-        return space.divide(BigInteger.valueOf(chainLength));
+          return space.divide(BigInteger.valueOf(chainLength));            
     }
 
     public static String createStartValues(BigInteger space) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        String random = "";
         BigInteger r;
-        Random rnd = new Random();
         do {
+            Random rnd = new Random();
             r = new BigInteger(space.bitLength(), rnd);
         } while (r.compareTo(space) >= 0);
-        random = r.toString();
+        String random = r.toString();
         return redman.reduce(Sha_1.SHA1(random), 0);
 
     }
 
     public static String buildChain(String start, int chainLength) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         HashMap chain = new HashMap<>(); //stores values in chain for check if preexisiting pair in chain 
-        String end = start, temp = "";
         /*
             Chain stores values to check if a pair of values in chain 
             Will avoid cirles within chain.
             Eg.         a=>b, b=>c, c=>d, d=>e
             Removes if: a=>b, b=>c, c=>a, a=>b 
         */
-        end = redman.reduce(Sha_1.SHA1(start), 0);
+       String end = redman.reduce(Sha_1.SHA1(start), 0);
         for (int i = 1; i < chainLength; i++) {
-            temp = redman.reduce(Sha_1.SHA1(end), i);
+           String temp = redman.reduce(Sha_1.SHA1(end), i);
             if ((chain.containsKey(end))
                     && (temp.equals(chain.get(end).toString()))) {
                 return "False";
@@ -108,7 +106,7 @@ public class TableGenerator {
 
     public HashMap createMap(int maxLength, int chainLength) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         BigInteger space = passwordSpace(alphabet.length(), maxLength);
-        int num = numberOfChains(space, chainLength).intValue();
+        int num = numberOfChains(space, chainLength).intValue() + 1;
         HashMap start = new HashMap<>();
         HashMap pairs = new HashMap<>();
 

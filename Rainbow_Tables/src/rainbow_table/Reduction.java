@@ -17,8 +17,8 @@ public class Reduction {
 
     String alphabet = "0";
     int maxLength = 1;
-    BigInteger passwordSpace = TableGenerator.passwordSpace(alphabet.length(), maxLength);
-    BigInteger p = passwordSpace.nextProbablePrime();
+    BigInteger passwordSpace;// = TableGenerator.passwordSpace(alphabet.length(), maxLength);
+    BigInteger p; //= passwordSpace.nextProbablePrime();
     int chainLength = 1;
 
     public Reduction() {
@@ -50,6 +50,9 @@ public class Reduction {
     }
 
     public String chainReduce(String hash, int pos, int chainLength) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        // Takes the hash input that needs breaking along with current pos in the chain
+        // eg. hash = a3c86, pos = 498, chainLength = 500
+        // hash -> R(498) -> newStr1 -> hash(newStr1) -> R(499) -> newStr2 -> hash(newStr2) -> R(500) -> return
         String pwd = reduce(hash, pos);
         while (pos != chainLength) {
             pos++;
@@ -84,9 +87,9 @@ public class Reduction {
         for (int i = 0; i < hashed.length(); i++) {
             c = c + (int) hashed.charAt(i);
         }
-       // c = pos + c; // added the current pos on to fron tof the number
-        BigInteger count = new BigInteger(c);
-        return count;
+        c = pos + c; // added the current pos on to fron tof the number
+        
+        return  new BigInteger(c);
     }
 
     public static String intToString(int n, String alphabet) {
