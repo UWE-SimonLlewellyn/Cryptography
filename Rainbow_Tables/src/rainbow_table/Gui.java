@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,8 +24,8 @@ public class Gui extends javax.swing.JFrame {
 
     public static String rainbowtable = "RainbowTable.ser";
     public static FileToTable deserializer = new FileToTable();
-    public RainbowTable start = deserializer.loadRainbowTable(rainbowtable);
-    public Reduction reduceMan = new Reduction(start.alphabet, start.maxLength, start.chainLength);
+    public RainbowTable globalTable = deserializer.loadRainbowTable(rainbowtable);
+    public Reduction reduceMan = new Reduction(globalTable.alphabet, globalTable.maxLength, globalTable.chainLength);
 
     /**
      * Creates new form Gui
@@ -300,7 +301,7 @@ public class Gui extends javax.swing.JFrame {
 
         String s = plainText.getText();
         String hashed = "Error";
-        if (s.length() <= start.maxLength) {
+        if (s.length() <= globalTable.maxLength) {
             try {
                 hashed = Sha_1.SHA1(s);
             } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
@@ -325,16 +326,16 @@ public class Gui extends javax.swing.JFrame {
     }//GEN-LAST:event_ClearPasswordForm
 
     private void crackHashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crackHashActionPerformed
-        HashMap pairs = start.getPairs();
-        TableGenerator table = new TableGenerator();
+        HashMap pairs = globalTable.getPairs();
+     //   TableGenerator table = new TableGenerator();
         try {
             if (pairs.size() > 0) {
                 String cypherText = hashText.getText();
                 String result = "Not Found";
                 Boolean found = false;
 
-                int chainLength = start.chainLength;
-                String hashedInput = cypherText, reduString = "";
+                int chainLength = globalTable.chainLength;
+                String reduString = "";
 
                 long timer = System.currentTimeMillis();
 
@@ -346,15 +347,15 @@ public class Gui extends javax.swing.JFrame {
                     temp = (String) iter.next();
                     test = Sha_1.SHA1(temp);
                     if (test.equals(cypherText)) {
-                        result = temp;                        
+                        result = temp;
                         found = true;
                         break;
                     }
                 }
-                
+
                 // Checks everything after the last value in chain
                 if (found == false) {
-                    for (int i = chainLength-1; i >= 0; i--) {
+                    for (int i = chainLength - 1; i >= 0; i--) {
                         reduString = reduceMan.chainReduce(cypherText, i, chainLength);
                         if (pairs.containsKey(reduString)) {
                             String nextInChain = pairs.get(reduString).toString();
@@ -369,7 +370,6 @@ public class Gui extends javax.swing.JFrame {
                                 }
                             }
                         }
-                      //  hashedInput = Sha_1.SHA1(reduString);
                     }
                 }
 
@@ -380,7 +380,7 @@ public class Gui extends javax.swing.JFrame {
 
                 //Display hash, decyrpted text and time in results box.
                 results.setText("Hash:    " + cypherText + "\nDecryped: " + result + "\nRun Time:   "
-                        + times + "\nAlphabet: " + start.alphabet + "\nMax password legnth: " + start.maxLength);
+                        + times + "\nAlphabet: " + globalTable.alphabet + "\nMax password legnth: " + globalTable.maxLength);
             } else {
                 results.setText("No Table on file. Please create table.");
             }
@@ -409,27 +409,44 @@ public class Gui extends javax.swing.JFrame {
     }//GEN-LAST:event_ClearTableForm
 
     private void CreateTable(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateTable
+        
+        // Remove all duplicate entried in entered alphabet
         String alphabet = alphabetText.getText();
+        char[] chars = alphabet.toCharArray();
+        Set<Character> charSet = new LinkedHashSet<Character>();
+        for (char c : chars) {
+            charSet.add(c);
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Character character : charSet) {
+            sb.append(character);
+        }
+        alphabet = sb.toString(); // clean alphabet
+        // Set lethgns of password and chain
         String chainLengthString = chainLengthText.getText();
         String maxLengthString = maxLengthText.getText();
 
+        // verification all three have been enterd
         if ((alphabet.equals(""))
                 || (chainLengthString.equals(""))
                 || (maxLengthString.equals(""))) {
             chainResults.setText("Please enter all the fields");
         } else {
-            long timer = System.currentTimeMillis();// time table creation
+            long timer = System.currentTimeMillis();// timer for table creation
             int chainLength = Integer.parseInt(chainLengthString);
             int maxLength = Integer.parseInt(maxLengthString);
-      //      
+            //      
             try {
+                // Set the recution object to the new peras 
+                // create Table generator with these paras
                 reduceMan = new Reduction(alphabet, maxLength, chainLength);
-                TableGenerator tableManager = new TableGenerator(alphabet, maxLength, chainLength, reduceMan);
-                start.setPairs(tableManager.createMap(maxLength, chainLength));
-                start.setAlphabet(alphabet);
-                start.setMaxLength(maxLength);
-                start.setChainLength(chainLength);
-                FileToTable.saveHashMapToFile(start, rainbowtable);               
+                TableGenerator tableManager = new TableGenerator(reduceMan);
+                // Update global HashMap
+                globalTable.setPairs(tableManager.createMap(maxLength, chainLength));
+                globalTable.setAlphabet(alphabet);
+                globalTable.setMaxLength(maxLength);
+                globalTable.setChainLength(chainLength);
+                FileToTable.saveHashMapToFile(globalTable, rainbowtable);
 
             } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
                 Logger.getLogger(Gui.class
@@ -446,9 +463,9 @@ public class Gui extends javax.swing.JFrame {
 
     private void ViewDetails(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewDetails
 
-        chainResults.setText("Alphabet: " + start.alphabet + "\nMax password legnth: "
-                + start.maxLength + "\nLength of chains: " + start.chainLength
-                + "\nNumber of chains: " + start.pairs.size() + "\nPairs: " + start.pairs.toString());
+        chainResults.setText("Alphabet: " + globalTable.alphabet + "\nMax password legnth: "
+                + globalTable.maxLength + "\nLength of chains: " + globalTable.chainLength
+                + "\nNumber of chains: " + globalTable.pairs.size() + "\nPairs: " + globalTable.pairs.toString());
 
     }//GEN-LAST:event_ViewDetails
 

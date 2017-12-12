@@ -27,11 +27,12 @@ public class TableGenerator {
 
     }
 
-    public TableGenerator(String alphabet, int maxLength, int chainLength, Reduction redMan) {
-        this.alphabet = alphabet;
-        this.chainLength = chainLength;
-        this.maxLength=maxLength;
+    public TableGenerator(Reduction redMan) {
         this.redman = redMan;
+        this.alphabet = redMan.alphabet;
+        this.chainLength = redMan.chainLength;
+        this.maxLength = redMan.maxLength;
+        
     }
 
     
