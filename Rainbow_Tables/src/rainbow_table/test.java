@@ -20,9 +20,9 @@ public class test {
     
     
     public static void main(String[] args) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        String alphabet = "0123456789";
-        int maxLength = 8;
-         int chainLength = 5000;
+        String alphabet = "012345";
+        int maxLength = 5;
+         int chainLength = 100;
      Reduction test = new Reduction(alphabet,maxLength,chainLength);
         
         
@@ -31,7 +31,7 @@ public class test {
 
     public static void test( String alphabet,int maxLength,int chainLength, Reduction test ) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
-        String start = "25000100";
+        String start = "44301";
 
          String s = buildChain(start, chainLength, test );
          System.out.println(s);
