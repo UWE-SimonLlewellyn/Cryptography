@@ -47,6 +47,8 @@ public class BruteForce extends javax.swing.JFrame {
         crackHash = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         clear = new javax.swing.JButton();
+        nestButton = new javax.swing.JRadioButton();
+        recButton = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Recursive Brute Force Password Cracker");
@@ -88,6 +90,20 @@ public class BruteForce extends javax.swing.JFrame {
             }
         });
 
+        nestButton.setText("Nest Loops");
+        nestButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nestButtonActionPerformed(evt);
+            }
+        });
+
+        recButton.setText("Recursion");
+        recButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -98,7 +114,6 @@ public class BruteForce extends javax.swing.JFrame {
                     .addComponent(clear)
                     .addComponent(jLabel3)
                     .addComponent(jLabel2)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -107,8 +122,14 @@ public class BruteForce extends javax.swing.JFrame {
                         .addGap(30, 30, 30)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(plainToHash)
-                            .addComponent(crackHash))))
-                .addContainerGap(83, Short.MAX_VALUE))
+                            .addComponent(crackHash)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(nestButton)
+                            .addComponent(recButton))))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,7 +149,12 @@ public class BruteForce extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(nestButton)
+                        .addGap(4, 4, 4)
+                        .addComponent(recButton)))
                 .addGap(18, 18, 18)
                 .addComponent(clear)
                 .addContainerGap(64, Short.MAX_VALUE))
@@ -140,24 +166,34 @@ public class BruteForce extends javax.swing.JFrame {
     private void crackHashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crackHashActionPerformed
         String cypherText = hashText.getText();
         String s = "", sAfterHash = "";
+        Boolean nest = nestButton.isSelected(), rec = recButton.isSelected(), valid = true;
         long timer = System.currentTimeMillis();
-        
-        while (!sAfterHash.equals(cypherText)) {
-            s = NextString.nextString(s, alphabet);
-            try {
-                sAfterHash = Sha_1.SHA1(s); 
-            } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-                Logger.getLogger(BruteForce.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        try {       
 
+            if ((nest) && (!rec)) {
+
+                s = NestLoop.nestLoop(alphabet, cypherText);
+            } else if ((!nest) && (rec)) {
+                while (!sAfterHash.equals(cypherText)) {
+                    s = NextString.nextString(s, alphabet);
+                    sAfterHash = Sha_1.SHA1(s);
+                }
+            }
+            else{
+                results.setText("Please section 1 decryption method");
+                valid = false;
+               }
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+            Logger.getLogger(BruteForce.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(valid){
         //times to complete in milliseconds
         timer = System.currentTimeMillis() - timer;
         //Conver time to minutes:seconds:milliseconds
         String times = new SimpleDateFormat("mm:ss:SSS").format(new Date(timer));
         //Display hash, decyrpted text and time in results box. 
         results.setText("Hash:    " + cypherText + "\nDecryped: " + s + "\nRun Time:   " + times);
-
+        }
 
     }//GEN-LAST:event_crackHashActionPerformed
 
@@ -173,9 +209,7 @@ public class BruteForce extends javax.swing.JFrame {
         try {
             hashed = Sha_1.SHA1(s);
 
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(BruteForce.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedEncodingException ex) {
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
             Logger.getLogger(BruteForce.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -190,6 +224,14 @@ public class BruteForce extends javax.swing.JFrame {
         results.setText("");
 
     }//GEN-LAST:event_clearActionPerformed
+
+    private void recButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_recButtonActionPerformed
+
+    private void nestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nestButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nestButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -234,8 +276,10 @@ public class BruteForce extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JRadioButton nestButton;
     private javax.swing.JTextField plainText;
     private javax.swing.JButton plainToHash;
+    private javax.swing.JRadioButton recButton;
     private javax.swing.JTextArea results;
     // End of variables declaration//GEN-END:variables
 }
