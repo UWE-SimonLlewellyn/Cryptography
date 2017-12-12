@@ -39,11 +39,11 @@ public class Reduction {
         // change hash to big int change
         // adding pos means the reduce funtion has changed on each poitn of the cahine
 
-       // BigInteger bigPos = BigInteger.valueOf(pos+1);
-        BigInteger n = processHash(hashed, pos);        
+    //    BigInteger bigPos = BigInteger.valueOf(pos+1);
+        BigInteger n = processHash(hashed);   
+        n= n.shiftLeft(pos+1);
+ //       n= n.multiply(bigPos);     
         n = n.mod(p);
-//        n= n.multiply(bigPos);     
-//        n = n.mod(p);
 
         return intToString(n.intValue(), alphabet);
 
@@ -53,8 +53,9 @@ public class Reduction {
         // Takes the hash input that needs breaking along with current pos in the chain
         // eg. hash = a3c86, pos = 498, chainLength = 500
         // hash -> R(498) -> newStr1 -> hash(newStr1) -> R(499) -> newStr2 -> hash(newStr2) -> R(500) -> return
+        // pos between 0 - (chainLegnth-1)
         String pwd = reduce(hash, pos);
-        while (pos != chainLength) {
+        while (pos != chainLength-1) {
             pos++;
             pwd = reduce(Sha_1.SHA1(pwd), pos);              
         }
@@ -82,12 +83,12 @@ public class Reduction {
     // ascci value of each hash. This should avoid duplicate BigIntegers values
     // eg a = 10, b = 15, c = 21
     // abc = 101521, bca = 152110, cba = 211510
-    public static BigInteger processHash(String hashed, int pos) {
+    public static BigInteger processHash(String hashed) {
         String c = "";
         for (int i = 0; i < hashed.length(); i++) {
             c = c + (int) hashed.charAt(i);
         }
-        c = pos + c; // added the current pos on to fron tof the number
+ //       c = pos + c; // added the current pos on to fron tof the number
         
         return  new BigInteger(c);
     }

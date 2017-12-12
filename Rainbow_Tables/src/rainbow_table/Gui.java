@@ -10,6 +10,8 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -324,39 +326,58 @@ public class Gui extends javax.swing.JFrame {
 
     private void crackHashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crackHashActionPerformed
         HashMap pairs = start.getPairs();
+        TableGenerator table = new TableGenerator();
         try {
             if (pairs.size() > 0) {
                 String cypherText = hashText.getText();
                 String result = "Not Found";
+                Boolean found = false;
 
                 int chainLength = start.chainLength;
                 String hashedInput = cypherText, reduString = "";
 
                 long timer = System.currentTimeMillis();
 
-                for (int i = chainLength; i > 0; i--) {
-                    reduString = reduceMan.chainReduce(hashedInput, i, chainLength);
-                    if (pairs.containsKey(reduString)) {
-                        String nextInChain = pairs.get(reduString).toString();
-                        for (int j = 0; j <= chainLength; j++) {
-                            String hashed = Sha_1.SHA1(nextInChain);
-                            if (hashed.equals(cypherText)) {
-                                result = nextInChain;
-                                i = 0;
-                                break;
-                            } else {
-                                nextInChain = reduceMan.reduce(hashed, j);
+                //Hash last item in a chain  to check 
+                Set last = pairs.keySet();
+                Iterator iter = last.iterator();
+                String test = "", temp = "";
+                while (iter.hasNext()) {
+                    temp = (String) iter.next();
+                    test = Sha_1.SHA1(temp);
+                    if (test.equals(cypherText)) {
+                        result = temp;                        
+                        found = true;
+                        break;
+                    }
+                }
+                
+                // Checks everything after the last value in chain
+                if (found == false) {
+                    for (int i = chainLength-1; i >= 0; i--) {
+                        reduString = reduceMan.chainReduce(cypherText, i, chainLength);
+                        if (pairs.containsKey(reduString)) {
+                            String nextInChain = pairs.get(reduString).toString();
+                            for (int j = 0; j <= chainLength; j++) {
+                                String hashed = Sha_1.SHA1(nextInChain);
+                                if (hashed.equals(cypherText)) {
+                                    result = nextInChain;
+                                    i = 0;
+                                    break;
+                                } else {
+                                    nextInChain = reduceMan.reduce(hashed, j);
+                                }
                             }
                         }
+                      //  hashedInput = Sha_1.SHA1(reduString);
                     }
-                    hashedInput = Sha_1.SHA1(reduString);
                 }
 
                 //times to complete in milliseconds
                 timer = System.currentTimeMillis() - timer;
                 //Conver time to minutes:seconds:milliseconds
                 String times = new SimpleDateFormat("mm:ss:SSS").format(new Date(timer));
-                
+
                 //Display hash, decyrpted text and time in results box.
                 results.setText("Hash:    " + cypherText + "\nDecryped: " + result + "\nRun Time:   "
                         + times + "\nAlphabet: " + start.alphabet + "\nMax password legnth: " + start.maxLength);
@@ -400,14 +421,15 @@ public class Gui extends javax.swing.JFrame {
             long timer = System.currentTimeMillis();// time table creation
             int chainLength = Integer.parseInt(chainLengthString);
             int maxLength = Integer.parseInt(maxLengthString);
-            TableGenerator tableManager = new TableGenerator(alphabet, maxLength, chainLength);
+      //      
             try {
+                reduceMan = new Reduction(alphabet, maxLength, chainLength);
+                TableGenerator tableManager = new TableGenerator(alphabet, maxLength, chainLength, reduceMan);
                 start.setPairs(tableManager.createMap(maxLength, chainLength));
                 start.setAlphabet(alphabet);
                 start.setMaxLength(maxLength);
                 start.setChainLength(chainLength);
-                FileToTable.saveHashMapToFile(start, rainbowtable);
-                reduceMan = new Reduction(start.alphabet, start.maxLength, start.chainLength);
+                FileToTable.saveHashMapToFile(start, rainbowtable);               
 
             } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
                 Logger.getLogger(Gui.class
@@ -424,7 +446,9 @@ public class Gui extends javax.swing.JFrame {
 
     private void ViewDetails(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewDetails
 
-        chainResults.setText("Alphabet: " + start.alphabet + "\nMax password legnth: " + start.maxLength + "\nNumber of chains: " + start.pairs.size() + "\nPairs: " + start.pairs.toString());
+        chainResults.setText("Alphabet: " + start.alphabet + "\nMax password legnth: "
+                + start.maxLength + "\nLength of chains: " + start.chainLength
+                + "\nNumber of chains: " + start.pairs.size() + "\nPairs: " + start.pairs.toString());
 
     }//GEN-LAST:event_ViewDetails
 

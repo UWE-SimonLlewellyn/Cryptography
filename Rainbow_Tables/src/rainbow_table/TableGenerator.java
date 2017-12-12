@@ -27,11 +27,11 @@ public class TableGenerator {
 
     }
 
-    public TableGenerator(String alphabet, int maxLength, int chainLength) {
+    public TableGenerator(String alphabet, int maxLength, int chainLength, Reduction redMan) {
         this.alphabet = alphabet;
         this.chainLength = chainLength;
         this.maxLength=maxLength;
-        this.redman = new Reduction(alphabet, maxLength, chainLength);
+        this.redman = redMan;
     }
 
     
@@ -54,6 +54,10 @@ public class TableGenerator {
           return space.divide(BigInteger.valueOf(chainLength));            
     }
 
+    /*
+        Creates a random number between 0 and size od pasasword space
+        Number is then reduce to String a passed back
+    */
     public static String createStartValues(BigInteger space) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         BigInteger r;
         do {
@@ -61,8 +65,7 @@ public class TableGenerator {
             r = new BigInteger(space.bitLength(), rnd);
         } while (r.compareTo(space) >= 0);
         String random = r.toString();
-        return redman.reduce(Sha_1.SHA1(random), 0);
-
+        return redman.reduce(Sha_1.SHA1(random), 1);
     }
 
     public static String buildChain(String start, int chainLength) throws NoSuchAlgorithmException, UnsupportedEncodingException {
@@ -76,9 +79,10 @@ public class TableGenerator {
        String end = redman.reduce(Sha_1.SHA1(start), 0);
         for (int i = 1; i < chainLength; i++) {
            String temp = redman.reduce(Sha_1.SHA1(end), i);
-            if ((chain.containsKey(end))
-                    && (temp.equals(chain.get(end).toString()))) {
+            if (chain.containsKey(end)){
+                   if(temp.equals(chain.get(end).toString())) {
                 return "False";
+            }
             } else {
                 chain.put(end, temp);
             }
@@ -86,30 +90,18 @@ public class TableGenerator {
         }
         return end;
 
-//        /*
-//         Checks for duplucated in the chain only
-//          Too many hits makes it impossible on lower sets
-//        */
-//        end = start; 
-//        for (int i = 0; i < chainLength; i++) {
-//            temp = redman.reduce(Sha_1.SHA1(end), i);
-//            if (chain.containsKey(temp))                     {
-//                return "False";
-//            } else {
-//                chain.put(temp, 0);
-//            }
-//            end = temp;
-//        }
-//        return end;
-
     }
 
+    /*
+        Creates map of start and end values of chains. 
+        End of chains are the Key and start of chains the value
+        Checks in place to avoid duplicate start and end values 
+    */
     public HashMap createMap(int maxLength, int chainLength) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         BigInteger space = passwordSpace(alphabet.length(), maxLength);
         int num = numberOfChains(space, chainLength).intValue() + 1;
         HashMap start = new HashMap<>();
         HashMap pairs = new HashMap<>();
-
 
         String tempStart, tempEnd;
         for (int i = num; i > 0; i--) {
@@ -143,5 +135,4 @@ public class TableGenerator {
         }
         return pairs;
     }
-
 }

@@ -31,7 +31,7 @@ public class test {
 
     public static void test( String alphabet,int maxLength,int chainLength, Reduction test ) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
-        String start = "44301";
+        String start = "34142";
 
          String s = buildChain(start, chainLength, test );
          System.out.println(s);
@@ -49,7 +49,7 @@ public class test {
         System.out.println(end);
         end = test.reduce(Sha_1.SHA1(start), 0);
         for (int i = 1; i < chainLength; i++) {
-            System.out.println(end);
+            System.out.println(end + " pos: " + i);
             temp = test.reduce(Sha_1.SHA1(end), i);
             if ((chain.containsKey(end))
                     && (temp.equals(chain.get(end).toString()))) {
