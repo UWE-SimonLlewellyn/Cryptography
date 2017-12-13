@@ -35,10 +35,13 @@ public class NextString {
         int index = alphabet.indexOf(rhs) + 1;
 
         // if check rhs = "9" 
+        // if so it resets rha to a
+        // passes lhs in method to check again
         if (rhs == last) {
             rhs =  alphabet.charAt(0);
             return nextString(lhs, alphabet) + rhs;
         } else {
+            // increments the current rhs by 1 in the alphabet
             rhs = alphabet.charAt(index);
             return lhs + rhs;
         }

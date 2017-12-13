@@ -164,37 +164,64 @@ public class BruteForce extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void crackHashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crackHashActionPerformed
-        String cypherText = hashText.getText();
-        String  s = "Not Found", sAfterHash = "";
-        Boolean nest = nestButton.isSelected(), rec = recButton.isSelected(), valid = true;
-        long timer = System.currentTimeMillis();
-        try {       
-
-            if ((nest) && (!rec)) {
-
-                s = NestLoop.nestLoop(alphabet, cypherText);
-            } else if ((!nest) && (rec)) {
-                while (!sAfterHash.equals(cypherText)) {
-                    s = NextString.nextString(s, alphabet);
-                    sAfterHash = Sha_1.SHA1(s);
+        String cypherText = hashText.getText(); // stores hashed text from gui
+        String validHashChars = "0123456789abcdef";
+        int validHashLength = 40;
+        Boolean validHash = false;
+        if (cypherText.length() == validHashLength) {
+            for (int i = 0; i <= cypherText.length(); i++) {              
+                if (validHashChars.indexOf(cypherText.charAt(i)) > -1) {
+                    validHash = true;
+                } else {
+                    validHash = false;
+                    break;
                 }
             }
-            else{
-                results.setText("Please section 1 decryption method");
-                valid = false;
-               }
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-            Logger.getLogger(BruteForce.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if(valid){
-        //times to complete in milliseconds
-        timer = System.currentTimeMillis() - timer;
-        //Conver time to minutes:seconds:milliseconds
-        String times = new SimpleDateFormat("mm:ss:SSS").format(new Date(timer));
-        //Display hash, decyrpted text and time in results box. 
-        results.setText("Hash:    " + cypherText + "\nDecryped: " + s + "\nRun Time:   " + times);
         }
 
+        if (validHash) {
+            String s = "", sAfterHash = "";
+            // hold selection of radio buttons
+            Boolean nest = nestButton.isSelected(), rec = recButton.isSelected(), valid = true;
+            long timer = System.currentTimeMillis(); // starts clock
+            try {
+
+                // Selection for type of algorithm to use to decyrpt
+                if ((nest) && (!rec)) {
+                    // Algorithm uses Nested For Loops and return answer 
+                    // Cypher text is passed and evaluated within method
+                    s = NestLoop.nestLoop(alphabet, cypherText);
+                } // Algorith for Recursive method 
+                // hash and comparison done ecternal to recursive method
+                else if ((!nest) && (rec)) {
+                    // check hash for empty string 
+                    sAfterHash = Sha_1.SHA1(s);
+                    //Loop to itterate until match has been found
+                    while (!sAfterHash.equals(cypherText)) {
+                        s = NextString.nextString(s, alphabet);
+                        sAfterHash = Sha_1.SHA1(s); // hashes current s for checking
+                    }
+                } else {
+                    // Error if none or both radio buttons are selected
+                    results.setText("Please section 1 decryption method");
+                    valid = false;
+                }
+            } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+                Logger.getLogger(BruteForce.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            if (valid) {
+                //times to complete in milliseconds
+                timer = System.currentTimeMillis() - timer;
+                //Conver time to minutes:seconds:milliseconds
+                String times = new SimpleDateFormat("mm:ss:SSS").format(new Date(timer));
+                //Display hash, decyrpted text and time in results box. 
+                results.setText("Hash:    " + cypherText + "\nDecryped: " + s + "\nRun Time:   " + times);
+            }
+        } else {
+            //Iff hash is not valid
+            results.setText("Not a valid SHA-1 Hash");
+        }
     }//GEN-LAST:event_crackHashActionPerformed
 
     private void plainTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plainTextActionPerformed
@@ -206,33 +233,37 @@ public class BruteForce extends javax.swing.JFrame {
         Boolean valid = false;
         results.setText("");
         try {
-        for (int i = 0; i<s.length();i++){
-            if(alphabet.indexOf(s.charAt(i)) > -1){
+            if (s.equals("")) { // checks for empty string has been entered. 
                 valid = true;
+            } else {
+                // Loop to check if entered input is part of the alphabet
+                for (int i = 0; i < s.length(); i++) {
+                    if (alphabet.indexOf(s.charAt(i)) > -1) {
+                        valid = true;
+                    } else {
+                        valid = false;
+                        break;
+                    }
+                }
             }
-            else{
-                valid = false;
-                break;
+            // If valid text has been entered text is then hashed and 
+            // returned to the hash text area.
+            if (valid) {
+                hashed = Sha_1.SHA1(s);
+                hashText.setText(hashed);
+            } else {
+                results.setText("Plain text contains invalid characters."
+                        + "\nOnly use a-z & 0-9");
             }
-        }    
-        if(valid){        
-            hashed = Sha_1.SHA1(s);
-            hashText.setText(hashed);
-        }
-        else{
-            results.setText("Plain text contains invalid characters."
-                    + "\nOnly use a-z & 0-9");
-        }
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
             Logger.getLogger(BruteForce.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        
 
     }//GEN-LAST:event_plainToHashActionPerformed
 
     private void clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearActionPerformed
-
+        // clear all input boxes
         plainText.setText("");
         hashText.setText("");
         results.setText("");

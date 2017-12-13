@@ -23,12 +23,19 @@ public class NestLoop {
         int count = alphabet.length();
         ArrayList<String> c = new ArrayList<>();
         String t = "";
+        // Add empty string and all alphabet string chars to arraylist
+        // c = {"",a,b,c,d...7,8,9}
         c.add(t);
         for (int i = 0; i < count; i++){            
             c.add(String.valueOf(alphabet.charAt(i)));
         }
+        
         count = c.size();
         String s = "";
+        // Start of loops to build string 
+        // After each loop finishes the count for the one above ticks over which start all internal loops again
+        // eg. s = "" + "" + "" + "" + "" + "" = "" 
+        // n + 1 = "" + "" + "" + "" + "" + a = a 
         for (int i = 0; i < count; i++) {
             for (int j = 0; j < count; j++) {
                 for (int k = 0; k < count; k++) {
@@ -46,7 +53,7 @@ public class NestLoop {
                 }
             }
         }
-        return "Not Found";
+        return "Not Found";  // unable to find combination of alphabet 
     }
 
 }
