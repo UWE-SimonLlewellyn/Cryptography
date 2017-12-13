@@ -1,53 +1,59 @@
 Hash:    fe635ae88967693bc7e7eead87906e62e472c52f
 Decryped: 187494
-Run Time:   00:05:329
+Run Time:   01:17:868
 Alphabet: 0123456789
 Max password legnth: 8
 
 Hash:    3ac2d907663deccd843f9bbcf0c63bd3ad885a0e
 Decryped: 940376
-Run Time:   00:13:053
+Run Time:   00:21:640
 Alphabet: 0123456789
 Max password legnth: 8
 
 Hash:    3557c095ed6c16a90febda48d6b3a4490107b0d9
 Decryped: 1098368
-Run Time:   00:00:385
+Run Time:   00:00:624
 Alphabet: 0123456789
 Max password legnth: 8
 
 Hash:    85e04129ed328d4a2b3eedabca74d08b3e6badc1
-Decryped: Not Found
-Run Time:   02:27:068
+Decryped: 0987593
+Run Time:   01:49:993
 Alphabet: 0123456789
 Max password legnth: 8
 
 Hash:    70352f41061eda4ff3c322094af068ba70c3b38b
 Decryped: Not Found
-Run Time:   02:25:437
+Run Time:   04:28:926
 Alphabet: 0123456789
 Max password legnth: 8
 
 Hash:    052bd5b02559d1270866c5626538e720cec0c135
 Decryped: 93020840
-Run Time:   00:54:711
+Run Time:   01:37:552
 Alphabet: 0123456789
 Max password legnth: 8
 
 Hash:    3e71f65d56cb29521ac16ff1f92ecace156b1db5
 Decryped: Not Found
-Run Time:   02:28:516
+Run Time:   04:27:767
 Alphabet: 0123456789
 Max password legnth: 8
 
 Hash:    bfc52d4e36cb45cb667749982755e63630f3bc93
 Decryped: Not Found
-Run Time:   02:26:238
+Run Time:   04:27:243
 Alphabet: 0123456789
 Max password legnth: 8
 
 Hash:    8cb2237d0679ca88db6464eac60da96345513964
 Decryped: 12345
-Run Time:   00:05:496
+Run Time:   00:09:844
+Alphabet: 0123456789
+Max password legnth: 8
+
+Hash:    38bbc0a1ca7e9b3e9f6ab33782e0f780f009db1f
+Decryped: 99887766
+Run Time:   00:00:156
 Alphabet: 0123456789
 Max password legnth: 8
