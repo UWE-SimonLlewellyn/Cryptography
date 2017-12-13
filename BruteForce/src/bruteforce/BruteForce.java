@@ -169,7 +169,7 @@ public class BruteForce extends javax.swing.JFrame {
         int validHashLength = 40;
         Boolean validHash = false;
         if (cypherText.length() == validHashLength) {
-            for (int i = 0; i <= cypherText.length(); i++) {              
+            for (int i = 0; i < cypherText.length(); i++) {              
                 if (validHashChars.indexOf(cypherText.charAt(i)) > -1) {
                     validHash = true;
                 } else {
@@ -216,7 +216,7 @@ public class BruteForce extends javax.swing.JFrame {
                 //Conver time to minutes:seconds:milliseconds
                 String times = new SimpleDateFormat("mm:ss:SSS").format(new Date(timer));
                 //Display hash, decyrpted text and time in results box. 
-                results.setText("Hash:    " + cypherText + "\nDecryped: " + s + "\nRun Time:   " + times);
+                results.setText("Hash: " + cypherText + "\nDecrypted: " + s + "\nRun Time: " + times);
             }
         } else {
             //Iff hash is not valid
