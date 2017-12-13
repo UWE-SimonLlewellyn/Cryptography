@@ -345,7 +345,7 @@ public class Gui extends javax.swing.JFrame {
 
     private void crackHashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crackHashActionPerformed
         HashMap pairs = globalTable.getPairs();
-     //   TableGenerator table = new TableGenerator();
+
         try {
             if (pairs.size() > 0) {
                 String cypherText = hashText.getText();
@@ -357,7 +357,7 @@ public class Gui extends javax.swing.JFrame {
 
                 long timer = System.currentTimeMillis();
 
-                //Hash last item in a chain  to check 
+                //Hash last item in a chain to check 
                 Set last = pairs.keySet();
                 Iterator iter = last.iterator();
                 String test = "", temp = "";

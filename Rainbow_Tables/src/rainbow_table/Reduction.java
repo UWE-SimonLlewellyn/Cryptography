@@ -37,23 +37,19 @@ public class Reduction {
 
     public String reduce(String hashed, int pos) {
         // change hash to big int change
-        // adding pos means the reduce funtion has changed on each poitn of the cahine
-
-    //    BigInteger bigPos = BigInteger.valueOf(pos+1);
-        BigInteger n = processHash(hashed);   
-        n= n.shiftLeft(pos+1);
- //       n= n.multiply(bigPos);     
+        // adding pos means the reduce funtion has changed on each poitn of the chain
+ //     BigInteger n = concatHash(hashed);      // Scored 7/10 in the test data
+        BigInteger n = asciiMultiple(hashed);   // scores 8/10 in the test data 
+        n= n.shiftLeft(pos+1);   
         n = n.mod(p);
-
         return intToString(n.intValue(), alphabet);
-
     }
 
     public String chainReduce(String hash, int pos, int chainLength) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         // Takes the hash input that needs breaking along with current pos in the chain
         // eg. hash = a3c86, pos = 498, chainLength = 500
         // hash -> R(498) -> newStr1 -> hash(newStr1) -> R(499) -> newStr2 -> hash(newStr2) -> R(500) -> return
-        // pos between 0 - (chainLegnth-1)
+        // pos between 0 - (chainLegnth-1) to match up with the creattbale method
         String pwd = reduce(hash, pos);
         while (pos != chainLength-1) {
             pos++;
@@ -67,7 +63,8 @@ public class Reduction {
     // Ascii count Sum of ascii might be too small
     // multiplying the doesn't seem to be the best method as repeat values
     // e.g. (a*b*c) == (b*a*c) == (c*b*a) etc
-    public static BigInteger asciiCount(String hashed) {
+    // However using the test set score 8/10 on the trainign data.
+    public static BigInteger asciiMultiple(String hashed) {
         BigInteger count = new BigInteger("1");
 
         for (int i = 0; i < hashed.length(); i++) {
@@ -83,13 +80,13 @@ public class Reduction {
     // ascci value of each hash. This should avoid duplicate BigIntegers values
     // eg a = 10, b = 15, c = 21
     // abc = 101521, bca = 152110, cba = 211510
-    public static BigInteger processHash(String hashed) {
+    // Scores 7/10 on the training data
+    public static BigInteger concatHash(String hashed) {
         String c = "";
         for (int i = 0; i < hashed.length(); i++) {
             c = c + (int) hashed.charAt(i);
         }
- //       c = pos + c; // added the current pos on to fron tof the number
-        
+      
         return  new BigInteger(c);
     }
 
