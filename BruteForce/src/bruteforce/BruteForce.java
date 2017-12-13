@@ -165,7 +165,7 @@ public class BruteForce extends javax.swing.JFrame {
 
     private void crackHashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crackHashActionPerformed
         String cypherText = hashText.getText();
-        String s = "", sAfterHash = "";
+        String  s = "Not Found", sAfterHash = "";
         Boolean nest = nestButton.isSelected(), rec = recButton.isSelected(), valid = true;
         long timer = System.currentTimeMillis();
         try {       
@@ -202,18 +202,32 @@ public class BruteForce extends javax.swing.JFrame {
     }//GEN-LAST:event_plainTextActionPerformed
 
     private void plainToHashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plainToHashActionPerformed
-
-        String s = plainText.getText();
-        String hashed = "Error";
-
+        String s = plainText.getText(), hashed = "Error";
+        Boolean valid = false;
+        results.setText("");
         try {
+        for (int i = 0; i<s.length();i++){
+            if(alphabet.indexOf(s.charAt(i)) > -1){
+                valid = true;
+            }
+            else{
+                valid = false;
+                break;
+            }
+        }    
+        if(valid){        
             hashed = Sha_1.SHA1(s);
-
+            hashText.setText(hashed);
+        }
+        else{
+            results.setText("Plain text contains invalid characters."
+                    + "\nOnly use a-z & 0-9");
+        }
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
             Logger.getLogger(BruteForce.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        hashText.setText(hashed);
+        
 
     }//GEN-LAST:event_plainToHashActionPerformed
 

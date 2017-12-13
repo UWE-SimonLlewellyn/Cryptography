@@ -301,6 +301,21 @@ public class Gui extends javax.swing.JFrame {
 
         String s = plainText.getText();
         String hashed = "Error";
+        
+        Boolean valid = false;
+        results.setText("");
+        
+        for (int i = 0; i<s.length();i++){
+            if(globalTable.alphabet.indexOf(s.charAt(i)) > -1){
+                valid = true;
+            }
+            else{
+                valid = false;
+                break;
+            }
+        }   
+        
+        if( valid){
         if (s.length() <= globalTable.maxLength) {
             try {
                 hashed = Sha_1.SHA1(s);
@@ -311,6 +326,9 @@ public class Gui extends javax.swing.JFrame {
             hashText.setText(hashed);
         } else {
             results.setText("Password larger than tables max password length");
+        }
+        }else{
+            results.setText("Input contains invalid characters.\n Please use only: " + globalTable.alphabet);
         }
     }//GEN-LAST:event_plainToHashActionPerformed
 
